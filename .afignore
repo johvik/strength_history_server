@@ -1,0 +1,7 @@
+# ignore files
+.git/
+.settings/
+node_modules/.bin/
+.afignore
+.gitignore
+.project
