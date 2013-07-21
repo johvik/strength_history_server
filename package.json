@@ -6,7 +6,12 @@
 	"private" : true,
 	"dependencies" : {
 		"express" : "latest",
-		"jade" : "latest"
+		"jade" : "latest",
+		"mongoose" : "latest",
+		"async" : "latest",
+		"passport" : "latest",
+		"passport-local" : "latest",
+		"bcrypt" : "latest"
 	},
 	"engine" : "node >= 0.8.14"
 }

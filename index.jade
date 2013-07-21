@@ -8,10 +8,16 @@ html(lang="en")
 	body
 		h1 Strength History
 		p A web interface will be available eventually.
-
-		form(action='/test', method='post')
-			input(id='user', type='text', name='user', value='test')
-			br
-			input(id='password', type='password', name='password', value='test')
-			br
-			input(type='submit', value='Login')
+		- if (user)
+			p You are #{user.username} 
+				a(href='/logout') Logout
+		- else
+			- if (message)
+				p #{message}
+			form(action='/login', method='post')
+				input(id='username', type='text', name='username', value='test')
+				br
+				input(id='password', type='password', name='password', value='test')
+				br
+				input(type='submit', value='Login')
+		iframe(src='/test')
