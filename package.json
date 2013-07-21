@@ -4,6 +4,9 @@
 	"description" : "Used to store your strength training data",
 	"author" : "johvik",
 	"private" : true,
+	"scripts" : {
+		"start" : "node app.js"
+	},
 	"dependencies" : {
 		"express" : "latest",
 		"jade" : "latest",
