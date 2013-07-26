@@ -11,14 +11,15 @@ exports.test = function(req, res) {
 		Exercise.findOne({
 			user : userid
 		}, function(err2, doc2) {
-			console.log(doc1);
-			console.log(doc2);
 			WorkoutData.addTest(userid, doc1._id, doc2._id);
+			doc2.latest(userid, function(err3, doc3) {
+				console.log(doc3);
+			});
 		});
 	});
 	Weight.latest(userid, function(err, doc) {
 		if (doc) {
-			console.log(doc);
+			// console.log(doc);
 		} else {
 			Weight.addTest(userid);
 			Exercise.addTest(userid);
