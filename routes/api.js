@@ -1,16 +1,32 @@
 var Weight = require('../lib/db/weight').Model;
 var Exercise = require('../lib/db/exercise').Model;
 var Workout = require('../lib/db/workout').Model;
+var WorkoutData = require('../lib/db/workoutdata').Model;
 
 exports.test = function(req, res) {
-	Weight.latest(req.user._id, function(err, doc) {
-		console.log(doc);
+	var userid = req.user._id;
+	Workout.findOne({
+		user : userid
+	}, function(err1, doc1) {
+		Exercise.findOne({
+			user : userid
+		}, function(err2, doc2) {
+			console.log(doc1);
+			console.log(doc2);
+			WorkoutData.addTest(userid, doc1._id, doc2._id);
+		});
 	});
-	// Weight.addTest(req.user._id);
-	// Exercise.addTest(req.user._id);
-	// Workout.addTest(req.user._id);
+	Weight.latest(userid, function(err, doc) {
+		if (doc) {
+			console.log(doc);
+		} else {
+			Weight.addTest(userid);
+			Exercise.addTest(userid);
+			Workout.addTest(userid);
+		}
+	});
 	Weight.find({
-		user : req.user._id
+		user : userid
 	}, function(err, docs) {
 		res.send('Hello ' + req.user.username + '! ' + docs);
 	});
