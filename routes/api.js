@@ -5,6 +5,7 @@ var WorkoutData = require('../lib/db/workoutdata').Model;
 
 exports.test = function(req, res) {
 	var userid = req.user._id;
+	//Weight.addTest(userid);
 	Exercise.findOne({
 		user : userid
 	}, function(err, doc) {
@@ -25,8 +26,8 @@ exports.test = function(req, res) {
 				doc2.latest(userid, function(err3, doc3) {
 					// console.log(doc3);
 					doc1.latest(userid, function(err4, doc4) {
-						console.log(err4);
-						console.log(doc4);
+						//console.log(err4);
+						//console.log(doc4);
 						Workout.addTest(userid, doc2._id);
 					});
 				});
