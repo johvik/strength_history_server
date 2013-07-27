@@ -3,18 +3,7 @@ var pageSize = 20;
 
 exports.get = function(req, res) {
 	var userid = req.user._id;
-	if (req.query.count === '') {
-		// ?count
-		Weight.count({
-			user : userid
-		}, function(err, doc) {
-			if (err !== null) {
-				res.send(500);
-			} else {
-				res.json(doc);
-			}
-		});
-	} else if (req.query.latest === '') {
+	if (req.query.latest === '') {
 		// ?latest
 		Weight.latest(userid, function(err, doc) {
 			if (err !== null) {
@@ -25,15 +14,27 @@ exports.get = function(req, res) {
 				res.json(doc);
 			}
 		});
+	} else if (req.query.pages === '') {
+		// ?pages
+		Weight.count({
+			user : userid
+		}, function(err, doc) {
+			if (err !== null) {
+				res.send(500);
+			} else {
+				var pages = Math.max(1, Math.ceil(doc / pageSize));
+				res.json(pages);
+			}
+		});
 	} else if (req.query.query === '') {
 		// ?query&page=x
 		var page = parseInt(req.query.page, 10);
-		if (!isNaN(page) && page >= 0) {
+		if (!isNaN(page) && page >= 1) {
 			Weight.find({
 				user : userid
 			}, '_id time weight', {
 				limit : pageSize,
-				skip : page * pageSize
+				skip : (page - 1) * pageSize
 			}, function(err, docs) {
 				if (err !== null) {
 					res.send(500);
