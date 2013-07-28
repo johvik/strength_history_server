@@ -2,6 +2,7 @@ var Weight = require('../lib/db/weight').Model;
 var pageSize = 20;
 
 exports.get = function(req, res) {
+	// TODO Change stuff to PUT / DELETE? and change the request paths
 	var userid = req.user._id;
 	if (req.query.latest === '') {
 		// ?latest

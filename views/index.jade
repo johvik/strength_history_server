@@ -7,24 +7,19 @@ block content
 		p You are #{user.username}!
 			br
 			a(href='/logout') Logout
-			form(action='/weight?remove', method='post')
-				input(id='id', type='text', name='id', value='someid')
-				br
-				input(type='submit', value='Remove')
-			form(action='/weight?save', method='post')
-				input(id='time', type='text', name='time', value='1374951455047')
-				br
-				input(id='weight', type='text', name='weight', value='70.5')
-				br
-				input(type='submit', value='Save')
-			form(action='/weight?update', method='post')
-				input(id='id', type='text', name='id', value='someid')
-				br
-				input(id='time', type='text', name='time', value='1374951455047')
-				br
-				input(id='weight', type='text', name='weight', value='79.5')
-				br
-				input(type='submit', value='Update')
+		select(id='select')
+			option Save
+			option Remove
+			option Update
+		br
+		input(id='id', type='text', name='id', value='someid')
+		br
+		input(id='time', type='text', name='time', value='1374951455047')
+		br
+		input(id='weight', type='text', name='weight', value='79.5')
+		br
+		input(id='send', type='button', value='Send')
+		br
 	- else
 		- if (message)
 			p #{message}
@@ -35,6 +30,3 @@ block content
 			br
 			input(type='submit', value='Login')
 	iframe(src='/test')
-	iframe(src='/weight?latest')
-	iframe(src='/weight?pages')
-	iframe(src='/weight?query&page=1')
