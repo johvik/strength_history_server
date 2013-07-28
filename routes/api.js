@@ -5,6 +5,7 @@ var WorkoutData = require('../lib/db/workoutdata').Model;
 
 exports.test = function(req, res) {
 	var userid = req.user._id;
+	Exercise.addTest(userid);
 	//Weight.addTest(userid);
 	Exercise.findOne({
 		user : userid
