@@ -52,6 +52,34 @@ Weight.update = function(id, time, weight, callback) {
 	});
 };
 
+Weight.get = function(callback) {
+	$.ajax('/weight', {
+		type : 'GET'
+	}).done(function(data, textStatus, jqXHR) {
+		if (callback) {
+			callback(null, data);
+		}
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		if (callback) {
+			callback(errorThrown, null);
+		}
+	});
+};
+
+Weight.getId = function(id, callback) {
+	$.ajax('/weight/' + id, {
+		type : 'GET'
+	}).done(function(data, textStatus, jqXHR) {
+		if (callback) {
+			callback(null, data);
+		}
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		if (callback) {
+			callback(errorThrown, null);
+		}
+	});
+};
+
 Weight.getLatest = function(callback) {
 	$.ajax('/weight/latest', {
 		type : 'GET'

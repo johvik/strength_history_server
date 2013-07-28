@@ -21,6 +21,48 @@ exports.del = function(req, res) {
 	}
 };
 
+exports.get = function(req, res) {
+	var userid = req.user._id;
+	// Get all
+	Exercise.find({
+		user : userid
+	}, '_id', {
+		sort : {
+			name : 1
+		}
+	}, function(err, docs) {
+		if (err !== null || docs === null) {
+			res.send(400);
+		} else {
+			var array = [];
+			for ( var i = 0, j = docs.length; i < j; i += 1) {
+				array.push(docs[i]._id);
+			}
+			res.json(array);
+		}
+	});
+};
+
+exports.getId = function(req, res) {
+	var userid = req.user._id;
+	// Get id
+	var id = req.params.id;
+	if (id !== undefined) {
+		Exercise.findOne({
+			_id : id,
+			user : userid
+		}, '_id name standardIncrease', function(err, docs) {
+			if (err !== null || docs === null) {
+				res.send(400);
+			} else {
+				res.json(docs);
+			}
+		});
+	} else {
+		res.send(400);
+	}
+};
+
 exports.getLatest = function(req, res) {
 	var userid = req.user._id;
 	// Latest id

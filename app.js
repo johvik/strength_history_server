@@ -38,9 +38,13 @@ app.del('/weight/:id', pass.ensureAuthenticated, weightApi.del);
 app.get('/exercise/latest/:id', pass.ensureAuthenticated, exerciseApi.getLatest);
 app.get('/exercise/pages/:id', pass.ensureAuthenticated, exerciseApi.getPage);
 app.get('/exercise/pages', pass.ensureAuthenticated, exerciseApi.getPages);
+app.get('/exercise', pass.ensureAuthenticated, exerciseApi.get);
+app.get('/exercise/:id', pass.ensureAuthenticated, exerciseApi.getId);
 app.get('/weight/latest', pass.ensureAuthenticated, weightApi.getLatest);
 app.get('/weight/pages/:id', pass.ensureAuthenticated, weightApi.getPage);
 app.get('/weight/pages', pass.ensureAuthenticated, weightApi.getPages);
+app.get('/weight', pass.ensureAuthenticated, weightApi.get);
+app.get('/weight/:id', pass.ensureAuthenticated, weightApi.getId);
 
 app.post('/exercise', pass.ensureAuthenticated, exerciseApi.post);
 app.post('/weight', pass.ensureAuthenticated, weightApi.post);

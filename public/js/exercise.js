@@ -52,6 +52,34 @@ Exercise.update = function(id, name, standardIncrease, callback) {
 	});
 };
 
+Exercise.get = function(callback) {
+	$.ajax('/exercise', {
+		type : 'GET'
+	}).done(function(data, textStatus, jqXHR) {
+		if (callback) {
+			callback(null, data);
+		}
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		if (callback) {
+			callback(errorThrown, null);
+		}
+	});
+};
+
+Exercise.getId = function(id, callback) {
+	$.ajax('/exercise/' + id, {
+		type : 'GET'
+	}).done(function(data, textStatus, jqXHR) {
+		if (callback) {
+			callback(null, data);
+		}
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		if (callback) {
+			callback(errorThrown, null);
+		}
+	});
+};
+
 Exercise.getLatest = function(id, callback) {
 	$.ajax('/exercise/latest/' + id, {
 		type : 'GET'
