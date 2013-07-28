@@ -6,6 +6,7 @@ var pass = require('./lib/pass');
 var routes = require('./routes');
 var api = require('./routes/api');
 var user = require('./routes/user');
+var exerciseApi = require('./routes/exerciseapi');
 var weightApi = require('./routes/weightapi');
 
 var app = express();
@@ -31,11 +32,20 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
+app.del('/exercise/:id', pass.ensureAuthenticated, exerciseApi.del);
 app.del('/weight/:id', pass.ensureAuthenticated, weightApi.del);
+
+app.get('/exercise/latest/:id', pass.ensureAuthenticated, exerciseApi.getLatest);
+app.get('/exercise/pages/:id', pass.ensureAuthenticated, exerciseApi.getPage);
+app.get('/exercise/pages', pass.ensureAuthenticated, exerciseApi.getPages);
 app.get('/weight/latest', pass.ensureAuthenticated, weightApi.getLatest);
 app.get('/weight/pages/:id', pass.ensureAuthenticated, weightApi.getPage);
 app.get('/weight/pages', pass.ensureAuthenticated, weightApi.getPages);
+
+app.post('/exercise', pass.ensureAuthenticated, exerciseApi.post);
 app.post('/weight', pass.ensureAuthenticated, weightApi.post);
+
+app.put('/exercise/:id', pass.ensureAuthenticated, exerciseApi.put);
 app.put('/weight/:id', pass.ensureAuthenticated, weightApi.put);
 
 app.get('/', routes.index);

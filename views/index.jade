@@ -12,13 +12,19 @@ block content
 			option Remove
 			option Update
 		br
-		input(id='id', type='text', name='id', value='someid')
+		label(for='id') id
+		input(id='id', type='text', value='someid')
+		label(for='time') time
+		input(id='time', type='text', value='1374951455047')
+		label(for='weight') weight
+		input(id='weight', type='text', value='79.5')
+		label(for='name') name
+		input(id='name', type='text', value='Press')
+		label(for='standardIncrease') stdinc
+		input(id='standardIncrease', type='text', value='5.4')
 		br
-		input(id='time', type='text', name='time', value='1374951455047')
-		br
-		input(id='weight', type='text', name='weight', value='79.5')
-		br
-		input(id='send', type='button', value='Send')
+		input(id='sendexercise', type='button', value='Send Exercise')
+		input(id='sendweight', type='button', value='Send Weight')
 		br
 	- else
 		- if (message)

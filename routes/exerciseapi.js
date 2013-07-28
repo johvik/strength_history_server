@@ -1,4 +1,4 @@
-var Weight = require('../lib/db/weight').Model;
+var Exercise = require('../lib/db/exercise').Model;
 var pageSize = 20;
 
 exports.del = function(req, res) {
@@ -6,7 +6,7 @@ exports.del = function(req, res) {
 	// Remove id
 	var id = req.params.id;
 	if (id !== undefined) {
-		Weight.remove({
+		Exercise.remove({
 			_id : id,
 			user : userid
 		}, function(err, doc) {
@@ -23,14 +23,19 @@ exports.del = function(req, res) {
 
 exports.getLatest = function(req, res) {
 	var userid = req.user._id;
-	// Latest
-	Weight.latest(userid, function(err, doc) {
-		if (err !== null || doc === null) {
-			res.send(400);
-		} else {
-			res.json(doc);
-		}
-	});
+	// Latest id
+	var id = req.params.id;
+	if (id !== undefined) {
+		Exercise.latest(userid, id, function(err, doc) {
+			if (err !== null || doc === null) {
+				res.send(400);
+			} else {
+				res.json(doc);
+			}
+		});
+	} else {
+		res.send(400);
+	}
 };
 
 exports.getPage = function(req, res) {
@@ -38,13 +43,13 @@ exports.getPage = function(req, res) {
 	// Pages id
 	var page = parseInt(req.params.id, 10);
 	if (!isNaN(page) && page >= 1) {
-		Weight.find({
+		Exercise.find({
 			user : userid
-		}, '_id time weight', {
+		}, '_id name standardIncrease', {
 			limit : pageSize,
 			skip : (page - 1) * pageSize,
 			sort : {
-				time : -1
+				name : 1
 			}
 		}, function(err, docs) {
 			if (err !== null || docs === null) {
@@ -61,7 +66,7 @@ exports.getPage = function(req, res) {
 exports.getPages = function(req, res) {
 	var userid = req.user._id;
 	// Pages
-	Weight.count({
+	Exercise.count({
 		user : userid
 	}, function(err, doc) {
 		if (err !== null) {
@@ -76,14 +81,14 @@ exports.getPages = function(req, res) {
 exports.post = function(req, res) {
 	var userid = req.user._id;
 	// Save
-	// body : time, weight
+	// body : name, standardIncrease
 	// returns id
-	var time = parseInt(req.body.time, 10);
-	var weight = parseFloat(req.body.weight);
-	if (!isNaN(time) && !isNaN(weight)) {
-		new Weight({
-			time : time,
-			weight : weight,
+	var name = req.body.name;
+	var standardIncrease = parseFloat(req.body.standardIncrease);
+	if (name !== undefined && !isNaN(standardIncrease)) {
+		new Exercise({
+			name : name,
+			standardIncrease : standardIncrease,
 			user : userid
 		}).save(function(err, doc) {
 			if (err !== null || doc === null) {
@@ -100,17 +105,17 @@ exports.post = function(req, res) {
 exports.put = function(req, res) {
 	var userid = req.user._id;
 	// Update id
-	// body : time, weight
+	// body : name, standardIncrease
 	var id = req.params.id;
-	var time = parseInt(req.body.time, 10);
-	var weight = parseFloat(req.body.weight);
-	if (id !== undefined && !isNaN(time) && !isNaN(weight)) {
-		Weight.update({
+	var name = req.body.name;
+	var standardIncrease = parseFloat(req.body.standardIncrease);
+	if (id !== undefined && name !== undefined && !isNaN(standardIncrease)) {
+		Exercise.update({
 			_id : id,
 			user : userid
 		}, {
-			time : time,
-			weight : weight
+			name : name,
+			standardIncrease : standardIncrease
 		}, function(err, doc) {
 			if (err !== null || doc === 0) {
 				res.send(400);
