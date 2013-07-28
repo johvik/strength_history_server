@@ -31,13 +31,18 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
+app.del('/weight/:id', pass.ensureAuthenticated, weightApi.del);
+app.get('/weight/latest', pass.ensureAuthenticated, weightApi.getLatest);
+app.get('/weight/pages/:id', pass.ensureAuthenticated, weightApi.getPage);
+app.get('/weight/pages', pass.ensureAuthenticated, weightApi.getPages);
+app.post('/weight', pass.ensureAuthenticated, weightApi.post);
+app.put('/weight/:id', pass.ensureAuthenticated, weightApi.put);
+
 app.get('/', routes.index);
 app.get('/logout', user.logout);
 app.get('/test', pass.ensureAuthenticated, api.test);
-app.get('/weight', pass.ensureAuthenticated, weightApi.get);
 
 app.post('/login', user.login);
-app.post('/weight', pass.ensureAuthenticated, weightApi.post);
 
 http.createServer(app).listen(app.get('port'), function() {
 	console.log('Strength History Web listening on port ' + app.get('port'));

@@ -6,74 +6,46 @@ $(function() {
 
 		var select = $('#select').find(':selected').text();
 		if (select === 'Save') {
-			$.ajax('/weight?save', {
-				type : 'POST',
-				data : {
-					time : time,
-					weight : weight
+			Weight.save(time, weight, function(err, data) {
+				if (err !== null) {
+					console.log(err);
+				} else {
+					console.log(data);
 				}
-			}).done(function(data, textStatus, jqXHR) {
-				console.log(data);
-			}).fail(function(jqXHR, textStatus, errorThrown) {
-				console.log(textStatus);
-				console.log(errorThrown);
 			});
 		} else if (select === 'Remove') {
-			$.ajax('/weight?remove', {
-				type : 'POST',
-				data : {
-					id : id
+			Weight.remove(id, function(err) {
+				if (err !== null) {
+					console.log(err);
 				}
-			}).done(function(data, textStatus, jqXHR) {
-				console.log(data);
-			}).fail(function(jqXHR, textStatus, errorThrown) {
-				console.log(textStatus);
-				console.log(errorThrown);
 			});
 		} else if (select === 'Update') {
-			$.ajax('/weight?update', {
-				type : 'POST',
-				data : {
-					id : id,
-					time : time,
-					weight : weight
+			Weight.update(id, time, weight, function(err) {
+				if (err !== null) {
+					console.log(err);
 				}
-			}).done(function(data, textStatus, jqXHR) {
-				console.log(data);
-			}).fail(function(jqXHR, textStatus, errorThrown) {
-				console.log(textStatus);
-				console.log(errorThrown);
 			});
 		}
 	});
-});
-
-$.ajax('/weight?latest', {
-	type : 'GET',
-	data : ''
-}).done(function(data, textStatus, jqXHR) {
-	console.log(data);
-}).fail(function(jqXHR, textStatus, errorThrown) {
-	console.log(textStatus);
-	console.log(errorThrown);
-});
-
-$.ajax('/weight?pages', {
-	type : 'GET',
-	data : ''
-}).done(function(data, textStatus, jqXHR) {
-	console.log(data);
-}).fail(function(jqXHR, textStatus, errorThrown) {
-	console.log(textStatus);
-	console.log(errorThrown);
-});
-
-$.ajax('/weight?query&page=1', {
-	type : 'GET',
-	data : ''
-}).done(function(data, textStatus, jqXHR) {
-	console.log(data);
-}).fail(function(jqXHR, textStatus, errorThrown) {
-	console.log(textStatus);
-	console.log(errorThrown);
+	Weight.getLatest(function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
+	Weight.getPages(function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
+	Weight.getPage(1, function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
 });
