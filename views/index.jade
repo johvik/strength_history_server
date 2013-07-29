@@ -22,9 +22,12 @@ block content
 		input(id='name', type='text', value='Press')
 		label(for='standardIncrease') stdinc
 		input(id='standardIncrease', type='text', value='5.4')
+		label(for='exercises') exercises
+		input(id='exercises', type='text', value='id1,id2,id3')
 		br
 		input(id='sendexercise', type='button', value='Send Exercise')
 		input(id='sendweight', type='button', value='Send Weight')
+		input(id='sendweight', type='button', value='Send Workout')
 		br
 	- else
 		- if (message)

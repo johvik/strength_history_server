@@ -2,6 +2,53 @@ function Weight() {
 	// Constructor
 }
 
+Weight.test = function() {
+	// save -> update -> remove
+	Weight.save(90144124, 2.5, function(err1, data1) {
+		console.assert(err1 === null, err1);
+		Weight.update(data1, 14124124, 25.1, function(err2) {
+			console.assert(err2 === null, err2);
+			Weight.remove(data1, function(err3, data3) {
+				console.assert(err3 === null, err3);
+			});
+		});
+	});
+	// save - invalid time
+	Weight.save('text', 2.5, function(err, data) {
+		console.assert(err !== null, err);
+	});
+	// save - invalid weight
+	Weight.save(241241241, 'text', function(err, data) {
+		console.assert(err !== null, err);
+	});
+	// remove - invalid id
+	Weight.remove('someid', function(err) {
+		console.assert(err !== null, err);
+	});
+	// update - invalid id
+	Weight.update('someid', 4214, 2.5, function(err) {
+		console.assert(err !== null, err);
+	});
+	// save -> update -> remove - invalid stuff
+	Weight.save(1141421, 2.5, function(err1, data1) {
+		console.assert(err1 === null, err1);
+		// update - invalid time
+		Weight.update(data1, 'text', 2.5, function(err2) {
+			console.assert(err2 !== null, err2);
+		});
+		// update - invalid weight
+		Weight.update(data1, 512124, 'text', function(err2) {
+			console.assert(err2 !== null, err2);
+		});
+		// remove after some time
+		setTimeout(function() {
+			Weight.remove(data1, function(err2) {
+				console.assert(err2 === null, err2);
+			});
+		}, 500);
+	});
+};
+
 Weight.remove = function(id, callback) {
 	$.ajax('/weight/' + id, {
 		type : 'DELETE'

@@ -1,3 +1,17 @@
+var callback = function(err, data) { // TODO Remove this
+	if (err !== null) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
+};
+
+function testAll() {
+	Exercise.test();
+	Weight.test();
+	Workout.test();
+}
+
 $(function() {
 	$('#sendexercise').click(function() {
 		var id = $('#id').val();
@@ -27,7 +41,6 @@ $(function() {
 			});
 		}
 	});
-
 	$('#sendweight').click(function() {
 		var id = $('#id').val();
 		var time = $('#time').val();
@@ -50,6 +63,34 @@ $(function() {
 			});
 		} else if (select === 'Update') {
 			Weight.update(id, time, weight, function(err) {
+				if (err !== null) {
+					console.log(err);
+				}
+			});
+		}
+	});
+	$('#sendworkout').click(function() {
+		var id = $('#id').val();
+		var name = $('#name').val();
+		var exercises = $('#exercises').val().split(',');
+
+		var select = $('#select').find(':selected').text();
+		if (select === 'Save') {
+			Workout.save(name, exercises, function(err, data) {
+				if (err !== null) {
+					console.log(err);
+				} else {
+					console.log(data);
+				}
+			});
+		} else if (select === 'Remove') {
+			Workout.remove(id, function(err) {
+				if (err !== null) {
+					console.log(err);
+				}
+			});
+		} else if (select === 'Update') {
+			Workout.update(id, name, exercises, function(err) {
 				if (err !== null) {
 					console.log(err);
 				}
@@ -85,6 +126,20 @@ $(function() {
 		}
 	});
 	Weight.getPage(1, function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
+	Workout.getPages(function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
+	Workout.getPage(1, function(err, data) {
 		if (err !== null) {
 			console.log(err);
 		} else {
