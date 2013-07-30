@@ -12,4 +12,16 @@ html(lang='en')
 		script(src='/js/workout.js')
 		script(src='/js/weight.js')
 	body
-		block content
+		div(id='top')
+			a(href='')
+				img(src='/img/logo.png')
+			div(id='left')
+				a(href='/') Home
+			div(id='right')
+				- if (user)
+					a(href='/logout') Logout
+				- else
+					a(href='/login') Login
+		div(id='main')
+			h1= page
+			block content

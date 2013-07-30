@@ -1,8 +1,7 @@
 exports.index = function(req, res) {
 	res.render('index', {
 		title : 'Strength History',
-		user : req.user,
-		message : req.session.message
+		page : 'Home',
+		user : req.user
 	});
-	delete req.session.message; // only display it once
 };

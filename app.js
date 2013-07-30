@@ -33,10 +33,11 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
-// Login routes
+// Main routes
 app.get('/', routes.index);
+app.get('/login', user.getLogin);
 app.get('/logout', user.logout);
-app.post('/login', user.login);
+app.post('/login', user.postLogin);
 
 app.get('/test', pass.ensureAuthenticated, api.test);
 

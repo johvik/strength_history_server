@@ -1,3 +1,11 @@
+$.ajax('/login', { // TODO Remove this
+	type : 'POST',
+	data : {
+		username : 'test',
+		password : 'test'
+	}
+});
+
 var callback = function(err, data) { // TODO Remove this
 	if (err !== null) {
 		console.log(err);

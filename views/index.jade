@@ -1,12 +1,8 @@
 extends layout
 
 block content
-	h1 Strength History
-	p A web interface will be available eventually.
 	- if (user)
 		p You are #{user.username}!
-			br
-			a(href='/logout') Logout
 		select(id='select')
 			option Save
 			option Remove
@@ -30,12 +26,4 @@ block content
 		input(id='sendworkout', type='button', value='Send Workout')
 		br
 	- else
-		- if (message)
-			p #{message}
-		form(action='/login', method='post')
-			input(id='username', type='text', name='username', value='test')
-			br
-			input(id='password', type='password', name='password', value='test')
-			br
-			input(type='submit', value='Login')
 	iframe(src='/test')
