@@ -3,25 +3,8 @@ function Workout() {
 }
 
 Workout.test = function() {
-	// save exercise for test
-	Exercise.save('name', 2.5, function(err1, data1) {
-		console.assert(err1 === null, err1);
-		Workout.save('name', [ data1 ], function(err2, data2) {
-			console.assert(err2 === null, err2);
-			Workout.remove(data2, function(err3, data3) {
-				console.assert(err3 === null, err3);
-			});
-		});
-		// remove after some time
-		setTimeout(function() {
-			Exercise.remove(data1, function(err2, data2) {
-				console.assert(err2 === null, err2);
-			});
-		}, 500);
-	});
-
 	// save -> update -> remove
-	Workout.save('name', [], function(err1, data1) {
+	Workout.save('name', [ '000000000000000000000000' ], function(err1, data1) {
 		console.assert(err1 === null, err1);
 		Workout.update(data1, 'newname', [], function(err2) {
 			console.assert(err2 === null, err2);

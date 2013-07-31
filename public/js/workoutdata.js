@@ -3,7 +3,67 @@ function WorkoutData() {
 }
 
 WorkoutData.test = function() {
-	// TODO Add tests
+	// save -> update -> remove
+	WorkoutData.save(90144124, '000000000000000000000000', [ {
+		exercise : '000000000000000000000000',
+		sets : [ {
+			weight : 50,
+			reps : 4
+		}, {
+			weight : 99.5,
+			reps : 2
+		} ]
+	} ], function(err1, data1) {
+		console.assert(err1 === null, err1);
+		WorkoutData.update(data1, 14124124, '000000000000000000000000', [], function(err2) {
+			console.assert(err2 === null, err2);
+			WorkoutData.remove(data1, function(err3, data3) {
+				console.assert(err3 === null, err3);
+			});
+		});
+	});
+	// save - invalid time
+	WorkoutData.save('text', '000000000000000000000000', [], function(err, data) {
+		console.assert(err !== null, err);
+	});
+	// save - invalid workout id
+	WorkoutData.save(241241241, 'text', [], function(err, data) {
+		console.assert(err !== null, err);
+	});
+	// save - invalid data
+	WorkoutData.save(241241241, '000000000000000000000000', [ 'something' ], function(err, data) {
+		console.assert(err !== null, err);
+	});
+	// remove - invalid id
+	WorkoutData.remove('someid', function(err) {
+		console.assert(err !== null, err);
+	});
+	// update - invalid id
+	WorkoutData.update('someid', 4214, '000000000000000000000000', [], function(err) {
+		console.assert(err !== null, err);
+	});
+	// save -> update -> remove - invalid stuff
+	WorkoutData.save(1141421, '000000000000000000000000', [], function(err1, data1) {
+		console.assert(err1 === null, err1);
+		// update - invalid time
+		WorkoutData.update(data1, 'text', '000000000000000000000000', [], function(err2) {
+			console.assert(err2 !== null, err2);
+		});
+		// update - invalid workout id
+		WorkoutData.update(data1, 512124, 'text', [], function(err2) {
+			console.assert(err2 !== null, err2);
+		});
+		// update - invalid data
+		WorkoutData.update(data1, 512124, '000000000000000000000000', [ 'something' ], function(err2) {
+			console.assert(err2 !== null, err2);
+		});
+		// remove after some time
+		setTimeout(function() {
+			WorkoutData.remove(data1, function(err2) {
+				console.assert(err2 === null, err2);
+			});
+		}, 500);
+	});
 };
 
 WorkoutData.remove = function(id, callback) {
