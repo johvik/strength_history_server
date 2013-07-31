@@ -54,11 +54,11 @@ Weight.remove = function(id, callback) {
 		type : 'DELETE'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
-			callback(null);
+			callback(null, data);
 		}
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		if (callback) {
-			callback(errorThrown);
+			callback(errorThrown, null);
 		}
 	});
 };
@@ -90,11 +90,11 @@ Weight.update = function(id, time, weight, callback) {
 		}
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
-			callback(null);
+			callback(null, data);
 		}
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		if (callback) {
-			callback(errorThrown);
+			callback(errorThrown, null);
 		}
 	});
 };

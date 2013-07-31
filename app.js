@@ -9,6 +9,7 @@ var user = require('./routes/user');
 var exerciseApi = require('./routes/exerciseapi');
 var weightApi = require('./routes/weightapi');
 var workoutApi = require('./routes/workoutapi');
+var workoutDataApi = require('./routes/workoutdataapi');
 
 var app = express();
 
@@ -69,6 +70,15 @@ app.get('/workout', pass.ensureAuthenticated, workoutApi.get);
 app.get('/workout/:id', pass.ensureAuthenticated, workoutApi.getId);
 app.post('/workout', pass.ensureAuthenticated, workoutApi.post);
 app.put('/workout/:id', pass.ensureAuthenticated, workoutApi.put);
+
+// Workout data API
+app.del('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.del);
+app.get('/workoutdata/pages/:id', pass.ensureAuthenticated, workoutDataApi.getPage);
+app.get('/workoutdata/pages', pass.ensureAuthenticated, workoutDataApi.getPages);
+app.get('/workoutdata', pass.ensureAuthenticated, workoutDataApi.get);
+app.get('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.getId);
+app.post('/workoutdata', pass.ensureAuthenticated, workoutDataApi.post);
+app.put('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.put);
 
 http.createServer(app).listen(app.get('port'), function() {
 	console.log('Strength History Web listening on port ' + app.get('port'));

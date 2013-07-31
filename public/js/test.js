@@ -18,6 +18,7 @@ function testAll() {
 	Exercise.test();
 	Weight.test();
 	Workout.test();
+	WorkoutData.test();
 }
 
 $(function() {
