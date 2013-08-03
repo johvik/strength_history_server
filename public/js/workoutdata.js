@@ -148,29 +148,25 @@ WorkoutData.getId = function(id, callback) {
 	});
 };
 
-WorkoutData.getAll = function(each, callback) {
+WorkoutData.getAll = function(each) {
+	var deferred = $.Deferred();
 	// Get list with IDs
-	return WorkoutData.get(function(err, data) {
+	WorkoutData.get(function(err, data) {
 		if (err !== null) {
-			if (callback) {
-				callback(err, null);
-			}
+			deferred.reject();
 		} else {
 			// Map the array to a function array
 			// Use apply to convert it to a proper call
 			$.when.apply($, data.map(function(id) {
 				return WorkoutData.getId(id, each);
 			})).then(function() {
-				if (callback) {
-					callback(null, 'done');
-				}
+				deferred.resolve();
 			}, function() {
-				if (callback) {
-					callback('fail', null);
-				}
+				deferred.reject();
 			});
 		}
 	});
+	return deferred.promise();
 };
 
 WorkoutData.getPages = function(callback) {
