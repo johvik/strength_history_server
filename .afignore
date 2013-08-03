@@ -5,4 +5,4 @@ node_modules/.bin/
 .afignore
 .gitignore
 .project
-start_mongo.bat
+start_with_mongo.bat
