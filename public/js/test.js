@@ -1,3 +1,18 @@
+var workouts = [];
+var exercises = [];
+
+$.when(Workout.getAll(function(err, data) {
+	workouts.push(data);
+	console.log(data);
+}), Exercise.getAll(function(err, data) {
+	exercises.push(data);
+	console.log(data);
+})).done(function() {
+	console.log(workouts);
+	console.log(exercises);
+	console.log('done');
+});
+
 $.ajax('/login', { // TODO Remove this
 	type : 'POST',
 	data : {
@@ -106,53 +121,54 @@ $(function() {
 			});
 		}
 	});
-	Exercise.getPages(function(err, data) {
-		if (err !== null) {
-			console.log(err);
-		} else {
-			console.log(data);
-		}
-	});
-	Exercise.getPage(1, function(err, data) {
-		if (err !== null) {
-			console.log(err);
-		} else {
-			console.log(data);
-		}
-	});
-	Weight.getLatest(function(err, data) {
-		if (err !== null) {
-			console.log(err);
-		} else {
-			console.log(data);
-		}
-	});
-	Weight.getPages(function(err, data) {
-		if (err !== null) {
-			console.log(err);
-		} else {
-			console.log(data);
-		}
-	});
-	Weight.getPage(1, function(err, data) {
-		if (err !== null) {
-			console.log(err);
-		} else {
-			console.log(data);
-		}
-	});
-	Workout.getPages(function(err, data) {
-		if (err !== null) {
-			console.log(err);
-		} else {
-			console.log(data);
-		}
-	});
-	Workout.getPage(1, function(err, data) {
-		if (err !== null) {
-			console.log(err);
-		} else {
-			console.log(data);
-		}
-	});
+});
+
+Exercise.getPages(function(err, data) {
+	if (err !== null) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
+});
+Exercise.getPage(1, function(err, data) {
+	if (err !== null) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
+});
+Weight.getLatest(function(err, data) {
+	if (err !== null) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
+});
+Weight.getPages(function(err, data) {
+	if (err !== null) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
+});
+Weight.getPage(1, function(err, data) {
+	if (err !== null) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
+});
+Workout.getPages(function(err, data) {
+	if (err !== null) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
+});
+Workout.getPage(1, function(err, data) {
+	if (err !== null) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
 });

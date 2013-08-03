@@ -2,6 +2,8 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var passport = require('passport');
+var assetManager = require('connect-assetmanager');
+// Local includes
 var pass = require('./lib/pass');
 var routes = require('./routes');
 var api = require('./routes/api');
@@ -12,6 +14,23 @@ var workoutApi = require('./routes/workoutapi');
 var workoutDataApi = require('./routes/workoutdataapi');
 
 var app = express();
+
+var assetManagerGroups = {
+	'js' : {
+		'debug' : true, // TODO Remove when done
+		'route' : /^\/js\/$/,
+		'path' : './public/js/',
+		'dataType' : 'javascript',
+		'files' : [ '*', 'test.js' /* Main script last */]
+	},
+	'css' : {
+		'route' : /^\/css\/$/,
+		'path' : './public/css/',
+		'dataType' : 'css',
+		'files' : [ 'style.css' ]
+	}
+};
+var assetsManagerMiddleware = assetManager(assetManagerGroups);
 
 app.set('port', process.env.VCAP_APP_PORT || 80);
 app.set('views', __dirname + '/views');
@@ -29,6 +48,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(assetsManagerMiddleware);
 
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
