@@ -50,7 +50,7 @@ Workout.test = function() {
 };
 
 Workout.remove = function(id, callback) {
-	$.ajax('/workout/' + id, {
+	return $.ajax('/workout/' + id, {
 		type : 'DELETE'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -64,7 +64,7 @@ Workout.remove = function(id, callback) {
 };
 
 Workout.save = function(name, exercises, callback) {
-	$.ajax('/workout', {
+	return $.ajax('/workout', {
 		type : 'POST',
 		data : {
 			name : name,
@@ -83,7 +83,7 @@ Workout.save = function(name, exercises, callback) {
 };
 
 Workout.update = function(id, name, exercises, callback) {
-	$.ajax('/workout/' + id, {
+	return $.ajax('/workout/' + id, {
 		type : 'PUT',
 		data : {
 			name : name,
@@ -102,7 +102,7 @@ Workout.update = function(id, name, exercises, callback) {
 };
 
 Workout.get = function(callback) {
-	$.ajax('/workout', {
+	return $.ajax('/workout', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -116,7 +116,7 @@ Workout.get = function(callback) {
 };
 
 Workout.getId = function(id, callback) {
-	$.ajax('/workout/' + id, {
+	return $.ajax('/workout/' + id, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -129,8 +129,33 @@ Workout.getId = function(id, callback) {
 	});
 };
 
+Workout.getAll = function(each, callback) {
+	// Get list with IDs
+	return Workout.get(function(err, data) {
+		if (err !== null) {
+			if (callback) {
+				callback(err, null);
+			}
+		} else {
+			// Map the array to a function array
+			// Use apply to convert it to a proper call
+			$.when.apply($, data.map(function(id) {
+				return Workout.getId(id, each);
+			})).then(function() {
+				if (callback) {
+					callback(null, 'done');
+				}
+			}, function() {
+				if (callback) {
+					callback('fail', null);
+				}
+			});
+		}
+	});
+};
+
 Workout.getPages = function(callback) {
-	$.ajax('/workout/pages', {
+	return $.ajax('/workout/pages', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -144,7 +169,7 @@ Workout.getPages = function(callback) {
 };
 
 Workout.getPage = function(page, callback) {
-	$.ajax('/workout/pages/' + page, {
+	return $.ajax('/workout/pages/' + page, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {

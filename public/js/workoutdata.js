@@ -67,7 +67,7 @@ WorkoutData.test = function() {
 };
 
 WorkoutData.remove = function(id, callback) {
-	$.ajax('/workoutdata/' + id, {
+	return $.ajax('/workoutdata/' + id, {
 		type : 'DELETE'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -81,7 +81,7 @@ WorkoutData.remove = function(id, callback) {
 };
 
 WorkoutData.save = function(time, workout, data, callback) {
-	$.ajax('/workoutdata', {
+	return $.ajax('/workoutdata', {
 		type : 'POST',
 		data : {
 			time : time,
@@ -101,7 +101,7 @@ WorkoutData.save = function(time, workout, data, callback) {
 };
 
 WorkoutData.update = function(id, time, workout, data, callback) {
-	$.ajax('/workoutdata/' + id, {
+	return $.ajax('/workoutdata/' + id, {
 		type : 'PUT',
 		data : {
 			time : time,
@@ -121,7 +121,7 @@ WorkoutData.update = function(id, time, workout, data, callback) {
 };
 
 WorkoutData.get = function(callback) {
-	$.ajax('/workoutdata', {
+	return $.ajax('/workoutdata', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -135,7 +135,7 @@ WorkoutData.get = function(callback) {
 };
 
 WorkoutData.getId = function(id, callback) {
-	$.ajax('/workoutdata/' + id, {
+	return $.ajax('/workoutdata/' + id, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -148,8 +148,33 @@ WorkoutData.getId = function(id, callback) {
 	});
 };
 
+WorkoutData.getAll = function(each, callback) {
+	// Get list with IDs
+	return WorkoutData.get(function(err, data) {
+		if (err !== null) {
+			if (callback) {
+				callback(err, null);
+			}
+		} else {
+			// Map the array to a function array
+			// Use apply to convert it to a proper call
+			$.when.apply($, data.map(function(id) {
+				return WorkoutData.getId(id, each);
+			})).then(function() {
+				if (callback) {
+					callback(null, 'done');
+				}
+			}, function() {
+				if (callback) {
+					callback('fail', null);
+				}
+			});
+		}
+	});
+};
+
 WorkoutData.getPages = function(callback) {
-	$.ajax('/workoutdata/pages', {
+	return $.ajax('/workoutdata/pages', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -163,7 +188,7 @@ WorkoutData.getPages = function(callback) {
 };
 
 WorkoutData.getPage = function(page, callback) {
-	$.ajax('/workoutdata/pages/' + page, {
+	return $.ajax('/workoutdata/pages/' + page, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {

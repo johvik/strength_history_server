@@ -50,7 +50,7 @@ Weight.test = function() {
 };
 
 Weight.remove = function(id, callback) {
-	$.ajax('/weight/' + id, {
+	return $.ajax('/weight/' + id, {
 		type : 'DELETE'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -64,7 +64,7 @@ Weight.remove = function(id, callback) {
 };
 
 Weight.save = function(time, weight, callback) {
-	$.ajax('/weight', {
+	return $.ajax('/weight', {
 		type : 'POST',
 		data : {
 			time : time,
@@ -82,7 +82,7 @@ Weight.save = function(time, weight, callback) {
 };
 
 Weight.update = function(id, time, weight, callback) {
-	$.ajax('/weight/' + id, {
+	return $.ajax('/weight/' + id, {
 		type : 'PUT',
 		data : {
 			time : time,
@@ -100,7 +100,7 @@ Weight.update = function(id, time, weight, callback) {
 };
 
 Weight.get = function(callback) {
-	$.ajax('/weight', {
+	return $.ajax('/weight', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -114,7 +114,7 @@ Weight.get = function(callback) {
 };
 
 Weight.getId = function(id, callback) {
-	$.ajax('/weight/' + id, {
+	return $.ajax('/weight/' + id, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -127,8 +127,33 @@ Weight.getId = function(id, callback) {
 	});
 };
 
+Weight.getAll = function(each, callback) {
+	// Get list with IDs
+	return Weight.get(function(err, data) {
+		if (err !== null) {
+			if (callback) {
+				callback(err, null);
+			}
+		} else {
+			// Map the array to a function array
+			// Use apply to convert it to a proper call
+			$.when.apply($, data.map(function(id) {
+				return Weight.getId(id, each);
+			})).then(function() {
+				if (callback) {
+					callback(null, 'done');
+				}
+			}, function() {
+				if (callback) {
+					callback('fail', null);
+				}
+			});
+		}
+	});
+};
+
 Weight.getLatest = function(callback) {
-	$.ajax('/weight/latest', {
+	return $.ajax('/weight/latest', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -142,7 +167,7 @@ Weight.getLatest = function(callback) {
 };
 
 Weight.getPages = function(callback) {
-	$.ajax('/weight/pages', {
+	return $.ajax('/weight/pages', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -156,7 +181,7 @@ Weight.getPages = function(callback) {
 };
 
 Weight.getPage = function(page, callback) {
-	$.ajax('/weight/pages/' + page, {
+	return $.ajax('/weight/pages/' + page, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {

@@ -50,7 +50,7 @@ Exercise.test = function() {
 };
 
 Exercise.remove = function(id, callback) {
-	$.ajax('/exercise/' + id, {
+	return $.ajax('/exercise/' + id, {
 		type : 'DELETE'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -64,7 +64,7 @@ Exercise.remove = function(id, callback) {
 };
 
 Exercise.save = function(name, standardIncrease, callback) {
-	$.ajax('/exercise', {
+	return $.ajax('/exercise', {
 		type : 'POST',
 		data : {
 			name : name,
@@ -82,7 +82,7 @@ Exercise.save = function(name, standardIncrease, callback) {
 };
 
 Exercise.update = function(id, name, standardIncrease, callback) {
-	$.ajax('/exercise/' + id, {
+	return $.ajax('/exercise/' + id, {
 		type : 'PUT',
 		data : {
 			name : name,
@@ -100,7 +100,7 @@ Exercise.update = function(id, name, standardIncrease, callback) {
 };
 
 Exercise.get = function(callback) {
-	$.ajax('/exercise', {
+	return $.ajax('/exercise', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -114,7 +114,7 @@ Exercise.get = function(callback) {
 };
 
 Exercise.getId = function(id, callback) {
-	$.ajax('/exercise/' + id, {
+	return $.ajax('/exercise/' + id, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -127,8 +127,33 @@ Exercise.getId = function(id, callback) {
 	});
 };
 
+Exercise.getAll = function(each, callback) {
+	// Get list with IDs
+	return Exercise.get(function(err, data) {
+		if (err !== null) {
+			if (callback) {
+				callback(err, null);
+			}
+		} else {
+			// Map the array to a function array
+			// Use apply to convert it to a proper call
+			$.when.apply($, data.map(function(id) {
+				return Exercise.getId(id, each);
+			})).then(function() {
+				if (callback) {
+					callback(null, 'done');
+				}
+			}, function() {
+				if (callback) {
+					callback('fail', null);
+				}
+			});
+		}
+	});
+};
+
 Exercise.getLatest = function(id, callback) {
-	$.ajax('/exercise/latest/' + id, {
+	return $.ajax('/exercise/latest/' + id, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -142,7 +167,7 @@ Exercise.getLatest = function(id, callback) {
 };
 
 Exercise.getPages = function(callback) {
-	$.ajax('/exercise/pages', {
+	return $.ajax('/exercise/pages', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -156,7 +181,7 @@ Exercise.getPages = function(callback) {
 };
 
 Exercise.getPage = function(page, callback) {
-	$.ajax('/exercise/pages/' + page, {
+	return $.ajax('/exercise/pages/' + page, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
