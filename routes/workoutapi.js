@@ -1,5 +1,4 @@
 var Workout = require('../lib/db/workout').Model;
-var pageSize = 20;
 
 exports.del = function(req, res) {
 	var userid = req.user._id;
@@ -63,24 +62,16 @@ exports.getId = function(req, res) {
 	}
 };
 
-exports.getPage = function(req, res) {
+exports.getLatest = function(req, res) {
 	var userid = req.user._id;
-	// Pages id
-	var page = parseInt(req.params.id, 10);
-	if (!isNaN(page) && page >= 1) {
-		Workout.find({
-			user : userid
-		}, '_id name exercises', {
-			limit : pageSize,
-			skip : (page - 1) * pageSize,
-			sort : {
-				name : 1
-			}
-		}, function(err, docs) {
-			if (err !== null || docs === null) {
+	// Latest id
+	var id = req.params.id;
+	if (id !== undefined) {
+		Workout.latest(userid, id, function(err, doc) {
+			if (err !== null || doc === null) {
 				res.send(400);
 			} else {
-				res.json(docs);
+				res.json(doc);
 			}
 		});
 	} else {
@@ -88,17 +79,19 @@ exports.getPage = function(req, res) {
 	}
 };
 
-exports.getPages = function(req, res) {
+exports.getAll = function(req, res) {
 	var userid = req.user._id;
-	// Pages
-	Workout.count({
+	Workout.find({
 		user : userid
-	}, function(err, doc) {
-		if (err !== null) {
+	}, '_id name exercises', {
+		sort : {
+			name : 1
+		}
+	}, function(err, docs) {
+		if (err !== null || docs === null) {
 			res.send(400);
 		} else {
-			var pages = Math.max(1, Math.ceil(doc / pageSize));
-			res.json(pages);
+			res.json(docs);
 		}
 	});
 };

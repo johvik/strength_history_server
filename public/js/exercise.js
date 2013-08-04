@@ -127,57 +127,22 @@ Exercise.getId = function(id, callback) {
 	});
 };
 
-Exercise.getAll = function(each) {
-	var deferred = $.Deferred();
-	// Get list with IDs
-	Exercise.get(function(err, data) {
-		if (err !== null) {
-			deferred.reject();
-		} else {
-			// Map the array to a function array
-			// Use apply to convert it to a proper call
-			$.when.apply($, data.map(function(id) {
-				return Exercise.getId(id, each);
-			})).then(function() {
-				deferred.resolve();
-			}, function() {
-				deferred.reject();
-			});
+Exercise.getAll = function(callback) {
+	return $.ajax('/exercise/all', {
+		type : 'GET'
+	}).done(function(data, textStatus, jqXHR) {
+		if (callback) {
+			callback(null, data);
+		}
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		if (callback) {
+			callback(errorThrown, null);
 		}
 	});
-	return deferred.promise();
 };
 
 Exercise.getLatest = function(id, callback) {
 	return $.ajax('/exercise/latest/' + id, {
-		type : 'GET'
-	}).done(function(data, textStatus, jqXHR) {
-		if (callback) {
-			callback(null, data);
-		}
-	}).fail(function(jqXHR, textStatus, errorThrown) {
-		if (callback) {
-			callback(errorThrown, null);
-		}
-	});
-};
-
-Exercise.getPages = function(callback) {
-	return $.ajax('/exercise/pages', {
-		type : 'GET'
-	}).done(function(data, textStatus, jqXHR) {
-		if (callback) {
-			callback(null, data);
-		}
-	}).fail(function(jqXHR, textStatus, errorThrown) {
-		if (callback) {
-			callback(errorThrown, null);
-		}
-	});
-};
-
-Exercise.getPage = function(page, callback) {
-	return $.ajax('/exercise/pages/' + page, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {

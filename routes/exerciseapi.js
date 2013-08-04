@@ -1,5 +1,4 @@
 var Exercise = require('../lib/db/exercise').Model;
-var pageSize = 20;
 
 exports.del = function(req, res) {
 	var userid = req.user._id;
@@ -80,42 +79,19 @@ exports.getLatest = function(req, res) {
 	}
 };
 
-exports.getPage = function(req, res) {
+exports.getAll = function(req, res) {
 	var userid = req.user._id;
-	// Pages id
-	var page = parseInt(req.params.id, 10);
-	if (!isNaN(page) && page >= 1) {
-		Exercise.find({
-			user : userid
-		}, '_id name standardIncrease', {
-			limit : pageSize,
-			skip : (page - 1) * pageSize,
-			sort : {
-				name : 1
-			}
-		}, function(err, docs) {
-			if (err !== null || docs === null) {
-				res.send(400);
-			} else {
-				res.json(docs);
-			}
-		});
-	} else {
-		res.send(400);
-	}
-};
-
-exports.getPages = function(req, res) {
-	var userid = req.user._id;
-	// Pages
-	Exercise.count({
+	Exercise.find({
 		user : userid
-	}, function(err, doc) {
-		if (err !== null) {
+	}, '_id name standardIncrease', {
+		sort : {
+			name : 1
+		}
+	}, function(err, docs) {
+		if (err !== null || docs === null) {
 			res.send(400);
 		} else {
-			var pages = Math.max(1, Math.ceil(doc / pageSize));
-			res.json(pages);
+			res.json(docs);
 		}
 	});
 };

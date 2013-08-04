@@ -129,29 +129,8 @@ Workout.getId = function(id, callback) {
 	});
 };
 
-Workout.getAll = function(each) {
-	var deferred = $.Deferred();
-	// Get list with IDs
-	Workout.get(function(err, data) {
-		if (err !== null) {
-			deferred.reject();
-		} else {
-			// Map the array to a function array
-			// Use apply to convert it to a proper call
-			$.when.apply($, data.map(function(id) {
-				return Workout.getId(id, each);
-			})).then(function() {
-				deferred.resolve();
-			}, function() {
-				deferred.reject();
-			});
-		}
-	});
-	return deferred.promise();
-};
-
-Workout.getPages = function(callback) {
-	return $.ajax('/workout/pages', {
+Workout.getAll = function(callback) {
+	return $.ajax('/workout/all', {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {
@@ -164,8 +143,8 @@ Workout.getPages = function(callback) {
 	});
 };
 
-Workout.getPage = function(page, callback) {
-	return $.ajax('/workout/pages/' + page, {
+Workout.getLatest = function(id, callback) {
+	return $.ajax('/workout/latest/' + id, {
 		type : 'GET'
 	}).done(function(data, textStatus, jqXHR) {
 		if (callback) {

@@ -2,11 +2,9 @@ var workouts = [];
 var exercises = [];
 
 $.when(Workout.getAll(function(err, data) {
-	workouts.push(data);
-	console.log(data);
+	workouts = data;
 }), Exercise.getAll(function(err, data) {
-	exercises.push(data);
-	console.log(data);
+	exercises = data;
 })).done(function() {
 	console.log(workouts);
 	console.log(exercises);
@@ -34,6 +32,44 @@ function testAll() {
 	Weight.test();
 	Workout.test();
 	WorkoutData.test();
+}
+
+function testSome() {
+	Exercise.getAll(function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
+	Weight.getLatest(function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
+	Weight.getPages(function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
+	Weight.getPage(1, function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
+	Workout.getAll(function(err, data) {
+		if (err !== null) {
+			console.log(err);
+		} else {
+			console.log(data);
+		}
+	});
 }
 
 $(function() {
@@ -121,54 +157,4 @@ $(function() {
 			});
 		}
 	});
-});
-
-Exercise.getPages(function(err, data) {
-	if (err !== null) {
-		console.log(err);
-	} else {
-		console.log(data);
-	}
-});
-Exercise.getPage(1, function(err, data) {
-	if (err !== null) {
-		console.log(err);
-	} else {
-		console.log(data);
-	}
-});
-Weight.getLatest(function(err, data) {
-	if (err !== null) {
-		console.log(err);
-	} else {
-		console.log(data);
-	}
-});
-Weight.getPages(function(err, data) {
-	if (err !== null) {
-		console.log(err);
-	} else {
-		console.log(data);
-	}
-});
-Weight.getPage(1, function(err, data) {
-	if (err !== null) {
-		console.log(err);
-	} else {
-		console.log(data);
-	}
-});
-Workout.getPages(function(err, data) {
-	if (err !== null) {
-		console.log(err);
-	} else {
-		console.log(data);
-	}
-});
-Workout.getPage(1, function(err, data) {
-	if (err !== null) {
-		console.log(err);
-	} else {
-		console.log(data);
-	}
 });
