@@ -56,6 +56,26 @@ h1 {
 	background-color: #FFFFFF;
 }
 
+.workout {
+	display: block;
+	padding: 10px;
+	border-bottom: 1px solid #CCCCCC;
+	text-decoration: none;
+	color: #000000;
+}
+
+.workout:first-child {
+	border-top: 1px solid #CCCCCC;
+}
+
+.workout:hover {
+	background-color: #EEEEEE;
+}
+
+.latest {
+	color: #999999;
+}
+
 .error {
 	color: #FF0000;
 }

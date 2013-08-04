@@ -9,16 +9,16 @@ html(lang='en')
 		script(src='http://code.jquery.com/jquery-1.10.2.min.js')
 		script(src='/js/')
 	body
-		div(id='top')
-			a(href='')
+		#top
+			a(href='/')
 				img(src='/img/logo.png')
-			div(id='left')
+			#left
 				a(href='/') Home
-			div(id='right')
+			#right
 				- if (user)
 					a(href='/logout') Logout
 				- else
 					a(href='/login') Login
-		div(id='main')
-			h1= page
+		#main
+			h1(id='page')= page
 			block content

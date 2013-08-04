@@ -2,28 +2,8 @@ extends layout
 
 block content
 	- if (user)
-		p You are #{user.username}!
-		select(id='select')
-			option Save
-			option Remove
-			option Update
-		br
-		label(for='id') id
-		input(id='id', type='text', value='someid')
-		label(for='time') time
-		input(id='time', type='text', value='1374951455047')
-		label(for='weight') weight
-		input(id='weight', type='text', value='79.5')
-		label(for='name') name
-		input(id='name', type='text', value='Press')
-		label(for='standardIncrease') stdinc
-		input(id='standardIncrease', type='text', value='5.4')
-		label(for='exercises') exercises
-		input(id='exercises', type='text', value='id1,id2,id3')
-		br
-		input(id='sendexercise', type='button', value='Send Exercise')
-		input(id='sendweight', type='button', value='Send Weight')
-		input(id='sendworkout', type='button', value='Send Workout')
-		br
+		#main_content
+			include main
+		#test_content
 	- else
-	iframe(src='/test')
+		p Welcome to Strength History!
