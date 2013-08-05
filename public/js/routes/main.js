@@ -2,15 +2,24 @@ function Main() {
 	// Constructor
 }
 
-function onWorkoutClick(id) {
-	console.log(workouts[id]);
-}
-
 Main.show = function() {
+	hideAll();
 	setPage('Main');
 	$('#main_content').show();
 	Main.update();
 };
+
+Main.hide = function() {
+	$('#main_content').hide();
+};
+
+function onWorkoutClick(id) {
+	return function() {
+		Step.init(workouts[id]);
+		Step.show();
+		return false;
+	};
+}
 
 Main.update = function() {
 	var main_workouts = $('#main_workouts');

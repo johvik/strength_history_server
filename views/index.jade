@@ -3,7 +3,8 @@ extends layout
 block content
 	- if (user)
 		#main_content
-			include main
-		#test_content
+			include routes/main
+		#step_content
+			include routes/step
 	- else
 		p Welcome to Strength History!

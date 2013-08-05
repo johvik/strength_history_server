@@ -21,7 +21,7 @@ var assetManagerGroups = {
 		'route' : /^\/js\/$/,
 		'path' : './public/js/',
 		'dataType' : 'javascript',
-		'files' : [ '*', 'routes/main.js', 'index.js' /* Main script last */]
+		'files' : [ '*', 'routes/main.js', 'routes/step.js', 'index.js' /* Main script last */]
 	},
 	'css' : {
 		'route' : /^\/css\/$/,

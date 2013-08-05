@@ -11,11 +11,9 @@ function setPage(page) {
 	$('#page').text(page);
 }
 
-function onWorkoutClick(id) {
-	return function() {
-		console.log(workouts[id]);
-		return false;
-	};
+function hideAll() {
+	Main.hide();
+	Step.hide();
 }
 
 function workoutLatestCallback(err, data) {
