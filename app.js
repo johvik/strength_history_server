@@ -4,7 +4,6 @@ var path = require('path');
 var passport = require('passport');
 // Local includes
 var pass = require('./lib/pass');
-var routes = require('./routes');
 var user = require('./routes/user');
 var exerciseApi = require('./routes/exerciseapi');
 var weightApi = require('./routes/weightapi');
