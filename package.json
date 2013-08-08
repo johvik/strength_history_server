@@ -14,8 +14,7 @@
 		"async" : "latest",
 		"passport" : "latest",
 		"passport-local" : "latest",
-		"bcrypt" : "latest",
-		"connect-assetmanager" : "latest"
+		"bcrypt" : "latest"
 	},
 	"engine" : "node >= 0.8.14"
 }
