@@ -26,7 +26,7 @@ exports.get = function(req, res) {
 	// Get all
 	Weight.find({
 		user : userid
-	}, '_id', {
+	}, '_id time weight', {
 		sort : {
 			time : -1
 		}
@@ -38,7 +38,7 @@ exports.get = function(req, res) {
 			for ( var i = 0, j = docs.length; i < j; i += 1) {
 				array.push(docs[i]._id);
 			}
-			res.json(array);
+			res.json(docs);
 		}
 	});
 };

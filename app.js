@@ -27,14 +27,16 @@ app.use(express.session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, '..', 'strength_history_web_client', 'build', 'output')));
+app.use(express.static(path.join(__dirname, '..', 'strength_history_web_client')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
 // Main routes
-// app.get('/login', user.getLogin);
+app.get('/checklogin.js', user.getCheckLogin);
 app.get('/logout', user.logout);
 app.post('/login', user.postLogin);
 
