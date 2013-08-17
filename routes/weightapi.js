@@ -34,10 +34,6 @@ exports.get = function(req, res) {
 		if (err !== null || docs === null) {
 			res.send(400);
 		} else {
-			var array = [];
-			for ( var i = 0, j = docs.length; i < j; i += 1) {
-				array.push(docs[i]._id);
-			}
 			res.json(docs);
 		}
 	});

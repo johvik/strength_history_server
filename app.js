@@ -10,6 +10,8 @@ var weightApi = require('./routes/weightapi');
 var workoutApi = require('./routes/workoutapi');
 var workoutDataApi = require('./routes/workoutdataapi');
 
+// TODO Clean up routes!
+
 // TODO Only keep the api part and move over to backbone.js
 
 var app = express();
