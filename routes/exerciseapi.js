@@ -108,7 +108,10 @@ exports.post = function(req, res) {
       if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json(doc._id);
+        // TODO Return json object on all!
+        res.json({
+          _id : doc._id
+        });
       }
     });
   } else {
