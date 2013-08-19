@@ -75,23 +75,6 @@ exports.getLatest = function(req, res) {
   }
 };
 
-exports.getAll = function(req, res) {
-  var userid = req.user._id;
-  Exercise.find({
-    user : userid
-  }, '_id name standardIncrease', {
-    sort : {
-      name : 1
-    }
-  }, function(err, docs) {
-    if (err !== null || docs === null) {
-      res.send(400);
-    } else {
-      res.json(docs);
-    }
-  });
-};
-
 exports.post = function(req, res) {
   var userid = req.user._id;
   // Save
@@ -108,7 +91,6 @@ exports.post = function(req, res) {
       if (err !== null || doc === null) {
         res.send(400);
       } else {
-        // TODO Return json object on all!
         res.json({
           _id : doc._id
         });

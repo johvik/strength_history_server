@@ -26,7 +26,7 @@ exports.get = function(req, res) {
   // Get all
   WorkoutData.find({
     user : userid
-  }, '_id', {
+  }, '_id time workout data', {
     sort : {
       time : -1
     }
@@ -34,11 +34,7 @@ exports.get = function(req, res) {
     if (err !== null || docs === null) {
       res.send(400);
     } else {
-      var array = [];
-      for ( var i = 0, j = docs.length; i < j; i += 1) {
-        array.push(docs[i]._id);
-      }
-      res.json(array);
+      res.json(docs);
     }
   });
 };
@@ -121,7 +117,9 @@ exports.post = function(req, res) {
       if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json(doc._id);
+        res.json({
+          _id : doc._id
+        });
       }
     });
   } else {

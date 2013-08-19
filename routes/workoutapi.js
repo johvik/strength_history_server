@@ -25,7 +25,7 @@ exports.get = function(req, res) {
   // Get all
   Workout.find({
     user : userid
-  }, '_id', {
+  }, '_id name exercises', {
     sort : {
       name : 1
     }
@@ -33,11 +33,7 @@ exports.get = function(req, res) {
     if (err !== null || docs === null) {
       res.send(400);
     } else {
-      var array = [];
-      for ( var i = 0, j = docs.length; i < j; i += 1) {
-        array.push(docs[i]._id);
-      }
-      res.json(array);
+      res.json(docs);
     }
   });
 };
@@ -79,23 +75,6 @@ exports.getLatest = function(req, res) {
   }
 };
 
-exports.getAll = function(req, res) {
-  var userid = req.user._id;
-  Workout.find({
-    user : userid
-  }, '_id name exercises', {
-    sort : {
-      name : 1
-    }
-  }, function(err, docs) {
-    if (err !== null || docs === null) {
-      res.send(400);
-    } else {
-      res.json(docs);
-    }
-  });
-};
-
 exports.post = function(req, res) {
   var userid = req.user._id;
   // Save
@@ -112,7 +91,9 @@ exports.post = function(req, res) {
       if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json(doc._id);
+        res.json({
+          _id : doc._id
+        });
       }
     });
   } else {

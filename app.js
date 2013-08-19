@@ -45,7 +45,6 @@ app.post('/login', user.postLogin);
 // Exercise API
 app.del('/exercise/:id', pass.ensureAuthenticated, exerciseApi.del);
 app.get('/exercise/latest/:id', pass.ensureAuthenticated, exerciseApi.getLatest);
-app.get('/exercise/all', pass.ensureAuthenticated, exerciseApi.getAll);
 app.get('/exercise', pass.ensureAuthenticated, exerciseApi.get);
 app.get('/exercise/:id', pass.ensureAuthenticated, exerciseApi.getId);
 app.post('/exercise', pass.ensureAuthenticated, exerciseApi.post);
@@ -64,7 +63,6 @@ app.put('/weight/:id', pass.ensureAuthenticated, weightApi.put);
 // Workout API
 app.del('/workout/:id', pass.ensureAuthenticated, workoutApi.del);
 app.get('/workout/latest/:id', pass.ensureAuthenticated, workoutApi.getLatest);
-app.get('/workout/all', pass.ensureAuthenticated, workoutApi.getAll);
 app.get('/workout', pass.ensureAuthenticated, workoutApi.get);
 app.get('/workout/:id', pass.ensureAuthenticated, workoutApi.getId);
 app.post('/workout', pass.ensureAuthenticated, workoutApi.post);
