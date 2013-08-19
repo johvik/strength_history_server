@@ -24,17 +24,18 @@ app.use(express.cookieParser());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.session({
-	secret : 'secret'
+  secret : 'secret'
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
-// app.use(express.static(path.join(__dirname, '..', 'strength_history_web_client', 'build', 'output')));
+// app.use(express.static(path.join(__dirname, '..',
+// 'strength_history_web_client', 'build', 'output')));
 app.use(express.static(path.join(__dirname, '..', 'strength_history_web_client')));
 // app.use(express.static(path.join(__dirname, 'public')));
 
 if ('development' == app.get('env')) {
-	app.use(express.errorHandler());
+  app.use(express.errorHandler());
 }
 
 // Main routes
@@ -80,5 +81,5 @@ app.post('/workoutdata', pass.ensureAuthenticated, workoutDataApi.post);
 app.put('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.put);
 
 http.createServer(app).listen(app.get('port'), function() {
-	console.log('Strength History Web listening on port ' + app.get('port'));
+  console.log('Strength History Web listening on port ' + app.get('port'));
 });
