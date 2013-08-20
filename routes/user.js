@@ -1,11 +1,40 @@
 var passport = require('passport');
+var async = require('async');
+var Exercise = require('../lib/db/exercise').Model;
+var Workout = require('../lib/db/workout').Model;
 
-exports.getCheckLogin = function(req, res) {
+exports.getUserData = function(req, res) {
   res.contentType('application/javascript');
   if (req.isAuthenticated()) {
-    return res.send('var CheckLogin = true;');
+    var userid = req.user._id;
+    async.parallel({
+      exercises : function(callback) {
+        Exercise.find({
+          user : userid
+        }, '_id name standardIncrease', {
+          sort : {
+            name : 1
+          }
+        }, callback);
+      },
+      workouts : function(callback) {
+        Workout.find({
+          user : userid
+        }, '_id name exercises', {
+          sort : {
+            name : 1
+          }
+        }, callback);
+      }
+    }, function(err, results) {
+      results.authenticated = true;
+      res.send('define(\'userdata\',function(){return' + JSON.stringify(results) + '})');
+    });
+  } else {
+    res.send('define(\'userdata\',function(){return' + JSON.stringify({
+      authenticated : false
+    }) + '})');
   }
-  return res.send('var CheckLogin = false;');
 };
 
 exports.postLogin = function(req, res, next) {

@@ -38,7 +38,7 @@ if ('development' == app.get('env')) {
 }
 
 // Main routes
-app.get('/checklogin.js', user.getCheckLogin);
+app.get('/js/userdata.js', user.getUserData);
 app.get('/logout', user.logout);
 app.post('/login', user.postLogin);
 
