@@ -155,7 +155,9 @@ exports.put = function(req, res) {
       if (err !== null || doc === 0) {
         res.send(400);
       } else {
-        res.send(200);
+        res.json({
+          _id : id
+        });
       }
     });
   } else {

@@ -11,20 +11,12 @@ exports.getUserData = function(req, res) {
       exercises : function(callback) {
         Exercise.find({
           user : userid
-        }, '_id name standardIncrease', {
-          sort : {
-            name : 1
-          }
-        }, callback);
+        }, '_id name standardIncrease', callback);
       },
       workouts : function(callback) {
         Workout.find({
           user : userid
-        }, '_id name exercises', {
-          sort : {
-            name : 1
-          }
-        }, callback);
+        }, '_id name exercises', callback);
       }
     }, function(err, results) {
       results.authenticated = true;
