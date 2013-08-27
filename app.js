@@ -29,13 +29,20 @@ app.use(express.session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
-// app.use(express.static(path.join(__dirname, '..', 'strength_history_web_client', 'build', 'output')));
-app.use(express.static(path.join(__dirname, '..', 'strength_history_web_client')));
-// app.use(express.static(path.join(__dirname, 'public')));
+var staticPath = path.join(__dirname, '..', 'strength_history_web_client');
+// var staticPath = path.join(__dirname, '..', 'strength_history_web_client', 'build', 'output');
+// var staticPath = path.join(__dirname, 'public');
+var indexPath = path.join(staticPath, 'index.html');
+app.use(express.static(staticPath));
 
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+// Set up paths needed to use pushState in Backbone.js
+app.get('/:var(exercises*|workouts*|history*)', function(req, res) {
+  res.sendfile(indexPath);
+});
 
 // Main routes
 app.get('/js/userdata.js', user.getUserData);
