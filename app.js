@@ -9,6 +9,7 @@ var exerciseApi = require('./routes/exerciseapi');
 var weightApi = require('./routes/weightapi');
 var workoutApi = require('./routes/workoutapi');
 var workoutDataApi = require('./routes/workoutdataapi');
+var historyApi = require('./routes/historyapi');
 
 // TODO Clean up routes!
 
@@ -40,7 +41,7 @@ if ('development' == app.get('env')) {
 }
 
 // Set up paths needed to use pushState in Backbone.js
-app.get('/:var(exercises*|workouts*|history*)', function(req, res) {
+app.get('/:var(exercises*|workouts*|history|history/edit/*)', function(req, res) {
   res.sendfile(indexPath);
 });
 
@@ -83,6 +84,9 @@ app.get('/workoutdata', pass.ensureAuthenticated, workoutDataApi.get);
 app.get('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.getId);
 app.post('/workoutdata', pass.ensureAuthenticated, workoutDataApi.post);
 app.put('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.put);
+
+// History API
+app.get('/historydata', pass.ensureAuthenticated, historyApi.get);
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log('Strength History Web listening on port ' + app.get('port'));
