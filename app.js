@@ -41,7 +41,7 @@ if ('development' == app.get('env')) {
 }
 
 // Set up paths needed to use pushState in Backbone.js
-app.get('/:var(exercises*|workouts*|history|history/edit/*)', function(req, res) {
+app.get('/:var(exercises*|workouts*|run/*|history|history/edit/*)', function(req, res) {
   res.sendfile(indexPath);
 });
 
