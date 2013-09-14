@@ -3,6 +3,7 @@ var http = require('http');
 var path = require('path');
 var passport = require('passport');
 // Local includes
+var config = require('./config');
 var pass = require('./lib/pass');
 var user = require('./routes/user');
 var exerciseApi = require('./routes/exerciseapi');
@@ -10,6 +11,11 @@ var weightApi = require('./routes/weightapi');
 var workoutApi = require('./routes/workoutapi');
 var workoutDataApi = require('./routes/workoutdataapi');
 var historyApi = require('./routes/historyapi');
+
+// Make sure nothing is missing in the config file
+if (!config.SESSION_SECRET) {
+  throw new Error('config.SESSION_SECRET is missing');
+}
 
 // TODO Clean up routes!
 
@@ -25,7 +31,7 @@ app.use(express.cookieParser());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.session({
-  secret : 'secret'
+  secret : config.SESSION_SECRET
 }));
 app.use(passport.initialize());
 app.use(passport.session());
