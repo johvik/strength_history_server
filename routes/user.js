@@ -35,7 +35,7 @@ exports.postLogin = function(req, res, next) {
       return next(err1);
     }
     if (!user) {
-      return res.send(400);
+      return res.send(400, info.message);
     }
     req.logIn(user, function(err2) {
       if (err2) {
