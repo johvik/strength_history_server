@@ -14,8 +14,12 @@ exports.postSignUp = function(req, res) {
       password : password
     }).save(function(err1, doc1) {
       if (err1 !== null || doc1 === null) {
-        // Failed to save, usually duplicate key
-        res.send(400);
+        // Failed to save
+        if (err1.code === 11000) { // code for duplicate key
+          res.send(409);
+        } else {
+          res.send(400);
+        }
       } else {
         mail.sendActivation(doc1.email, doc1.activation, function(err2, doc2) {
           if (err2) {
