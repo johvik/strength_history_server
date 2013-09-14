@@ -35,7 +35,6 @@ exports.postLogin = function(req, res, next) {
       return next(err1);
     }
     if (!user) {
-      req.session.message = info.message;
       return res.send(400);
     }
     req.logIn(user, function(err2) {
