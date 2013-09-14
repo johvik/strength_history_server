@@ -11,10 +11,20 @@ var weightApi = require('./routes/weightapi');
 var workoutApi = require('./routes/workoutapi');
 var workoutDataApi = require('./routes/workoutdataapi');
 var historyApi = require('./routes/historyapi');
+var mail = require('./lib/mail');
 
 // Make sure nothing is missing in the config file
+if (!config.SERVER_ADDRESS) {
+  throw new Error('config.SERVER_ADDRESS is missing');
+}
 if (!config.SESSION_SECRET) {
   throw new Error('config.SESSION_SECRET is missing');
+}
+if (!config.EMAIL_ACCOUNT) {
+  throw new Error('config.EMAIL_ACCOUNT is missing');
+}
+if (!config.EMAIL_PASSWORD) {
+  throw new Error('config.EMAIL_PASSWORD is missing');
 }
 
 // TODO Clean up routes!
@@ -56,6 +66,7 @@ app.get('/js/userdata.js', user.getUserData);
 app.get('/logout', user.logout);
 app.get('/activate', user.activate);
 app.post('/login', user.postLogin);
+app.post('/signup', user.postSignUp);
 
 // Exercise API
 app.del('/exercise/:id', pass.ensureAuthenticated, exerciseApi.del);

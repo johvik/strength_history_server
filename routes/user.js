@@ -3,6 +3,39 @@ var async = require('async');
 var Exercise = require('../lib/db/exercise').Model;
 var Workout = require('../lib/db/workout').Model;
 var User = require('../lib/db/user').Model;
+var mail = require('../lib/mail');
+
+exports.postSignUp = function(req, res) {
+  var email = req.body.email;
+  var password = req.body.password;
+  if (email !== undefined && password !== undefined) {
+    new User({
+      email : email,
+      password : password
+    }).save(function(err1, doc1) {
+      if (err1 !== null || doc1 === null) {
+        // Failed to save, usually duplicate key
+        res.send(400);
+      } else {
+        mail.sendActivation(doc1.email, doc1.activation, function(err2, doc2) {
+          if (err2) {
+            // Failed to send mail, remove from DB
+            User.remove({
+              _id : doc1._id,
+              email : email
+            }, function(err3, doc3) {
+              res.send(400);
+            });
+          } else {
+            res.send(200);
+          }
+        });
+      }
+    });
+  } else {
+    res.send(400);
+  }
+};
 
 exports.activate = function(req, res) {
   var email = req.query.email;
@@ -26,13 +59,13 @@ exports.activate = function(req, res) {
       }
     }, function(err, doc) {
       if (err !== null || doc === 0) {
-        res.send(400);
+        res.send(400, 'Invalid activation link.');
       } else {
         res.send(200, 'Account activated!');
       }
     });
   } else {
-    res.send(400);
+    res.send(400, 'Invalid activation link.');
   }
 };
 
