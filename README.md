@@ -1,5 +1,5 @@
 Strength History Server
-===========================
+=======================
 
 A simple server for Strength History to store your data online.
 
