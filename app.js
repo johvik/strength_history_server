@@ -11,7 +11,6 @@ var weightApi = require('./routes/weightapi');
 var workoutApi = require('./routes/workoutapi');
 var workoutDataApi = require('./routes/workoutdataapi');
 var historyApi = require('./routes/historyapi');
-var mail = require('./lib/mail');
 
 // Make sure nothing is missing in the config file
 if (!config.SERVER_ADDRESS) {
