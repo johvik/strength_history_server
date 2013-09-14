@@ -51,9 +51,10 @@ app.get('/:var(exercises*|workouts*|run/*|history|history/edit/*|signup)', funct
   res.sendfile(indexPath);
 });
 
-// Main routes
+// User routes
 app.get('/js/userdata.js', user.getUserData);
 app.get('/logout', user.logout);
+app.get('/activate', user.activate);
 app.post('/login', user.postLogin);
 
 // Exercise API

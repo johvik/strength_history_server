@@ -2,6 +2,39 @@ var passport = require('passport');
 var async = require('async');
 var Exercise = require('../lib/db/exercise').Model;
 var Workout = require('../lib/db/workout').Model;
+var User = require('../lib/db/user').Model;
+
+exports.activate = function(req, res) {
+  var email = req.query.email;
+  var key = req.query.key;
+  if (email !== undefined && key !== undefined) {
+    User.update({
+      email : email,
+      $and : [
+        {
+          activation : key
+        },
+        {
+          activation : {
+            $ne : 'done'
+          }
+        }
+      ]
+    }, {
+      $set : {
+        activation : 'done'
+      }
+    }, function(err, doc) {
+      if (err !== null || doc === 0) {
+        res.send(400);
+      } else {
+        res.send(200, 'Account activated!');
+      }
+    });
+  } else {
+    res.send(400);
+  }
+};
 
 exports.getUserData = function(req, res) {
   res.contentType('application/javascript');
