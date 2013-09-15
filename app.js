@@ -44,10 +44,10 @@ app.use(app.router);
 app.use(function(req, res, next) {
   // Force ssl, x-forwarded-proto is set by appfog
   var host = req.get('host');
-  if (req.get('x-forwarded-proto') !== 'https' && host !== 'localhost') {
-    return res.redirect('https://' + host + req.url);
+  if (req.get('x-forwarded-proto') === 'https' || req.secure === true || host === 'localhost') {
+    return next();
   }
-  next();
+  res.redirect('https://' + host + req.url);
 });
 // var staticPath = path.join(__dirname, '..', 'strength_history_web');
 var staticPath = path.join(__dirname, 'public');
