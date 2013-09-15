@@ -1,16 +1,16 @@
 var Weight = require('../lib/db/weight').Model;
 var WorkoutData = require('../lib/db/workoutdata').Model;
 var async = require('async');
-var pageSize = 20; // For each collection
+var pageSize = 20; // For both collections
 
 exports.get = function(req, res) {
   var userid = req.user._id;
   // Get all
   async.parallel([
     function(callback) {
-      WorkoutData.find({
+      Weight.find({
         user : userid
-      }, '_id time workout data',
+      }, '_id time weight',
       // {
       // sort : {
       // time : -1
@@ -19,9 +19,9 @@ exports.get = function(req, res) {
       callback);
     },
     function(callback) {
-      Weight.find({
+      WorkoutData.find({
         user : userid
-      }, '_id time weight',
+      }, '_id time workout data',
       // {
       // sort : {
       // time : -1
@@ -47,4 +47,23 @@ exports.getPage = function(req, res) {
 exports.getPages = function(req, res) {
   var userid = req.user._id;
   // Pages
+  async.parallel([
+    function(callback) {
+      Weight.count({
+        user : userid
+      }, callback);
+    },
+    function(callback) {
+      WorkoutData.count({
+        user : userid
+      }, callback);
+    }
+  ], function(err, results) {
+    if (err !== null) {
+      res.send(400);
+    } else {
+      var pages = Math.max(1, Math.ceil((results[0] + results[1]) / pageSize));
+      res.json(pages);
+    }
+  });
 };

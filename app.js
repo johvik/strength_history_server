@@ -26,8 +26,6 @@ if (!config.EMAIL_PASSWORD) {
   throw new Error('config.EMAIL_PASSWORD is missing');
 }
 
-// TODO Clean up routes!
-
 var app = express();
 
 app.set('port', process.env.VCAP_APP_PORT || 80);
@@ -76,8 +74,6 @@ app.put('/exercise/:id', pass.ensureAuthenticated, exerciseApi.put);
 // Weight API
 app.del('/weight/:id', pass.ensureAuthenticated, weightApi.del);
 app.get('/weight/latest', pass.ensureAuthenticated, weightApi.getLatest);
-app.get('/weight/pages/:id', pass.ensureAuthenticated, weightApi.getPage);
-app.get('/weight/pages', pass.ensureAuthenticated, weightApi.getPages);
 app.get('/weight', pass.ensureAuthenticated, weightApi.get);
 app.get('/weight/:id', pass.ensureAuthenticated, weightApi.getId);
 app.post('/weight', pass.ensureAuthenticated, weightApi.post);
@@ -93,8 +89,6 @@ app.put('/workout/:id', pass.ensureAuthenticated, workoutApi.put);
 
 // Workout data API
 app.del('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.del);
-app.get('/workoutdata/pages/:id', pass.ensureAuthenticated, workoutDataApi.getPage);
-app.get('/workoutdata/pages', pass.ensureAuthenticated, workoutDataApi.getPages);
 app.get('/workoutdata', pass.ensureAuthenticated, workoutDataApi.get);
 app.get('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.getId);
 app.post('/workoutdata', pass.ensureAuthenticated, workoutDataApi.post);
@@ -102,6 +96,8 @@ app.put('/workoutdata/:id', pass.ensureAuthenticated, workoutDataApi.put);
 
 // History API
 app.get('/historydata', pass.ensureAuthenticated, historyApi.get);
+app.get('/historydata/pages/:id', pass.ensureAuthenticated, historyApi.getPage);
+app.get('/historydata/pages', pass.ensureAuthenticated, historyApi.getPages);
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log('Strength History Web listening on port ' + app.get('port'));

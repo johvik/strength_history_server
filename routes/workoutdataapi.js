@@ -1,5 +1,4 @@
 var WorkoutData = require('../lib/db/workoutdata').Model;
-var pageSize = 20;
 
 exports.del = function(req, res) {
   var userid = req.user._id;
@@ -57,46 +56,6 @@ exports.getId = function(req, res) {
   } else {
     res.send(400);
   }
-};
-
-exports.getPage = function(req, res) {
-  var userid = req.user._id;
-  // Pages id
-  var page = parseInt(req.params.id, 10);
-  if (!isNaN(page) && page >= 1) {
-    WorkoutData.find({
-      user : userid
-    }, '_id time workout data', {
-      limit : pageSize,
-      skip : (page - 1) * pageSize,
-      sort : {
-        time : -1
-      }
-    }, function(err, docs) {
-      if (err !== null || docs === null) {
-        res.send(400);
-      } else {
-        res.json(docs);
-      }
-    });
-  } else {
-    res.send(400);
-  }
-};
-
-exports.getPages = function(req, res) {
-  var userid = req.user._id;
-  // Pages
-  WorkoutData.count({
-    user : userid
-  }, function(err, doc) {
-    if (err !== null) {
-      res.send(400);
-    } else {
-      var pages = Math.max(1, Math.ceil(doc / pageSize));
-      res.json(pages);
-    }
-  });
 };
 
 exports.post = function(req, res) {

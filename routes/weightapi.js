@@ -1,5 +1,4 @@
 var Weight = require('../lib/db/weight').Model;
-var pageSize = 20;
 
 exports.del = function(req, res) {
   var userid = req.user._id;
@@ -67,46 +66,6 @@ exports.getLatest = function(req, res) {
       res.send(400);
     } else {
       res.json(doc);
-    }
-  });
-};
-
-exports.getPage = function(req, res) {
-  var userid = req.user._id;
-  // Pages id
-  var page = parseInt(req.params.id, 10);
-  if (!isNaN(page) && page >= 1) {
-    Weight.find({
-      user : userid
-    }, '_id time weight', {
-      limit : pageSize,
-      skip : (page - 1) * pageSize,
-      sort : {
-        time : -1
-      }
-    }, function(err, docs) {
-      if (err !== null || docs === null) {
-        res.send(400);
-      } else {
-        res.json(docs);
-      }
-    });
-  } else {
-    res.send(400);
-  }
-};
-
-exports.getPages = function(req, res) {
-  var userid = req.user._id;
-  // Pages
-  Weight.count({
-    user : userid
-  }, function(err, doc) {
-    if (err !== null) {
-      res.send(400);
-    } else {
-      var pages = Math.max(1, Math.ceil(doc / pageSize));
-      res.json(pages);
     }
   });
 };
