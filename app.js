@@ -41,8 +41,15 @@ app.use(express.session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
+app.use(function(req, res, next) {
+  // Force ssl, x-forwarded-proto is set by appfog
+  var host = req.get('host');
+  if (req.get('x-forwarded-proto') !== 'https' && host !== 'localhost') {
+    return res.redirect('https://' + host + req.url);
+  }
+  next();
+});
 // var staticPath = path.join(__dirname, '..', 'strength_history_web');
-// var staticPath = path.join(__dirname, '..', 'strength_history_web', 'build', 'output');
 var staticPath = path.join(__dirname, 'public');
 var indexPath = path.join(staticPath, 'index.html');
 app.use(express.static(staticPath));
