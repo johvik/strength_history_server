@@ -28,8 +28,6 @@ if (!config.EMAIL_PASSWORD) {
 
 // TODO Clean up routes!
 
-// TODO Only keep the api part and move over to backbone.js
-
 var app = express();
 
 app.set('port', process.env.VCAP_APP_PORT || 80);
