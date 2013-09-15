@@ -21,7 +21,6 @@ exports.postSignUp = function(req, res) {
           res.send(400);
         }
       } else {
-        return res.send(200); // TODO Remove this mail bypass
         mail.sendActivation(doc1.email, doc1.activation, function(err2, doc2) {
           if (err2) {
             // Failed to send mail, remove from DB
@@ -45,19 +44,10 @@ exports.postSignUp = function(req, res) {
 exports.activate = function(req, res) {
   var email = req.query.email;
   var key = req.query.key;
-  if (email !== undefined && key !== undefined) {
+  if (email !== undefined && key !== undefined && key !== 'done') {
     User.update({
       email : email,
-      $and : [
-        {
-          activation : key
-        },
-        {
-          activation : {
-            $ne : 'done'
-          }
-        }
-      ]
+      activation : key
     }, {
       $set : {
         activation : 'done'

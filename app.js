@@ -41,9 +41,9 @@ app.use(express.session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
-var staticPath = path.join(__dirname, '..', 'strength_history_web');
+// var staticPath = path.join(__dirname, '..', 'strength_history_web');
 // var staticPath = path.join(__dirname, '..', 'strength_history_web', 'build', 'output');
-// var staticPath = path.join(__dirname, 'public');
+var staticPath = path.join(__dirname, 'public');
 var indexPath = path.join(staticPath, 'index.html');
 app.use(express.static(staticPath));
 
