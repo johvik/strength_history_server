@@ -69,6 +69,9 @@ app.get('/logout', user.logout);
 app.get('/activate', user.activate);
 app.post('/login', user.postLogin);
 app.post('/signup', user.postSignUp);
+app.post('/', function(req, res) {
+  res.redirect('/');
+});
 
 // Exercise API
 app.del('/exercise/:id', pass.ensureAuthenticated, exerciseApi.del);

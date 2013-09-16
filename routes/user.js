@@ -67,6 +67,7 @@ exports.activate = function(req, res) {
 
 exports.getUserData = function(req, res) {
   res.contentType('application/javascript');
+  res.header("Cache-Control", "no-cache");
   if (req.isAuthenticated()) {
     var userid = req.user._id;
     async.parallel({
