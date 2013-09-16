@@ -6,7 +6,7 @@ var User = require('../lib/db/user').Model;
 var mail = require('../lib/mail');
 
 exports.postSignUp = function(req, res) {
-  return res.send(400); // TODO Activate signup again
+  return res.send(400, 'Account creation has been disabled during development.'); // TODO Activate signup again
   var email = req.body.email;
   var password = req.body.password;
   if (email !== undefined && password !== undefined) {
@@ -17,9 +17,9 @@ exports.postSignUp = function(req, res) {
       if (err1 !== null || doc1 === null) {
         // Failed to save
         if (err1.code === 11000) { // code for duplicate key
-          res.send(409);
+          res.send(409, 'E-mail already in use.');
         } else {
-          res.send(400);
+          res.send(400, 'Failed to create account, please try again later.');
         }
       } else {
         mail.sendActivation(doc1.email, doc1.activation, function(err2, doc2) {
@@ -29,7 +29,7 @@ exports.postSignUp = function(req, res) {
               _id : doc1._id,
               email : email
             }, function(err3, doc3) {
-              res.send(400);
+              res.send(400, 'Failed to create account, please try again later.');
             });
           } else {
             res.send(200);
