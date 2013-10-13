@@ -46,11 +46,11 @@ exports.getId = function(req, res) {
     WorkoutData.findOne({
       _id : id,
       user : userid
-    }, '_id time workout data', function(err, docs) {
-      if (err !== null || docs === null) {
+    }, '_id time workout data', function(err, doc) {
+      if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json(docs);
+        res.json(doc);
       }
     });
   } else {
@@ -95,19 +95,25 @@ exports.put = function(req, res) {
   var workout = req.body.workout;
   var data = req.body.data;
   if (id !== undefined && !isNaN(time) && workout !== undefined && data !== undefined) {
-    WorkoutData.update({
+    // Find -> save to use the validation
+    WorkoutData.findOne({
       _id : id,
       user : userid
-    }, {
-      time : time,
-      workout : workout,
-      data : data
-    }, function(err, doc) {
-      if (err !== null || doc === 0) {
+    }, '_id time workout data', function(err, doc) {
+      if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json({
-          _id : id
+        doc.time = time;
+        doc.workout = workout;
+        doc.data = data;
+        doc.save(function(err2, doc2) {
+          if (err2 !== null || doc2 === null) {
+            res.send(400);
+          } else {
+            res.json({
+              _id : doc2._id
+            });
+          }
         });
       }
     });

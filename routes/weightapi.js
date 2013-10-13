@@ -46,11 +46,11 @@ exports.getId = function(req, res) {
     Weight.findOne({
       _id : id,
       user : userid
-    }, '_id time weight', function(err, docs) {
-      if (err !== null || docs === null) {
+    }, '_id time weight', function(err, doc) {
+      if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json(docs);
+        res.json(doc);
       }
     });
   } else {
@@ -104,18 +104,24 @@ exports.put = function(req, res) {
   var time = parseInt(req.body.time, 10);
   var weight = parseFloat(req.body.weight);
   if (id !== undefined && !isNaN(time) && !isNaN(weight)) {
-    Weight.update({
+    // Find -> save to use the validation
+    Weight.findOne({
       _id : id,
       user : userid
-    }, {
-      time : time,
-      weight : weight
-    }, function(err, doc) {
-      if (err !== null || doc === 0) {
+    }, '_id time weight', function(err, doc) {
+      if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json({
-          _id : id
+        doc.time = time;
+        doc.weight = weight;
+        doc.save(function(err2, doc2) {
+          if (err2 !== null || doc2 === null) {
+            res.send(400);
+          } else {
+            res.json({
+              _id : doc2._id
+            });
+          }
         });
       }
     });

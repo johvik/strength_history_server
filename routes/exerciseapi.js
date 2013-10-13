@@ -46,11 +46,11 @@ exports.getId = function(req, res) {
     Exercise.findOne({
       _id : id,
       user : userid
-    }, '_id name standardIncrease', function(err, docs) {
-      if (err !== null || docs === null) {
+    }, '_id name standardIncrease', function(err, doc) {
+      if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json(docs);
+        res.json(doc);
       }
     });
   } else {
@@ -109,18 +109,24 @@ exports.put = function(req, res) {
   var name = req.body.name;
   var standardIncrease = parseFloat(req.body.standardIncrease);
   if (id !== undefined && name !== undefined && !isNaN(standardIncrease)) {
-    Exercise.update({
+    // Find -> save to use the validation
+    Exercise.findOne({
       _id : id,
       user : userid
-    }, {
-      name : name,
-      standardIncrease : standardIncrease
-    }, function(err, doc) {
-      if (err !== null || doc === 0) {
+    }, '_id name standardIncrease', function(err, doc) {
+      if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json({
-          _id : id
+        doc.name = name;
+        doc.standardIncrease = standardIncrease;
+        doc.save(function(err2, doc2) {
+          if (err2 !== null || doc2 === null) {
+            res.send(400);
+          } else {
+            res.json({
+              _id : doc2._id
+            });
+          }
         });
       }
     });

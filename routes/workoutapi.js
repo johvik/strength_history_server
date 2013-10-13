@@ -46,11 +46,11 @@ exports.getId = function(req, res) {
     Workout.findOne({
       _id : id,
       user : userid
-    }, '_id name exercises', function(err, docs) {
-      if (err !== null || docs === null) {
+    }, '_id name exercises', function(err, doc) {
+      if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json(docs);
+        res.json(doc);
       }
     });
   } else {
@@ -102,7 +102,6 @@ exports.post = function(req, res) {
 };
 
 exports.put = function(req, res) {
-  // TODO Fix validation for all .update!
   var userid = req.user._id;
   // Update id
   // body : name, exercises
@@ -110,18 +109,24 @@ exports.put = function(req, res) {
   var name = req.body.name;
   var exercises = req.body.exercises;
   if (id !== undefined && name !== undefined && exercises !== undefined) {
-    Workout.update({
+    // Find -> save to use the validation
+    Workout.findOne({
       _id : id,
       user : userid
-    }, {
-      name : name,
-      exercises : exercises
-    }, function(err, doc) {
-      if (err !== null || doc === 0) {
+    }, '_id name exercises', function(err, doc) {
+      if (err !== null || doc === null) {
         res.send(400);
       } else {
-        res.json({
-          _id : id
+        doc.name = name;
+        doc.exercises = exercises;
+        doc.save(function(err2, doc2) {
+          if (err2 !== null || doc2 === null) {
+            res.send(400);
+          } else {
+            res.json({
+              _id : doc2._id
+            });
+          }
         });
       }
     });
