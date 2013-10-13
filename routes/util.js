@@ -115,3 +115,36 @@ exports.post = function(Schema, get_obj) {
     }
   };
 };
+
+/**
+ * Updates the object from get_obj and ID in Schema for the current user
+ * 
+ * @param Schema
+ *          The database model to get
+ * @param get_obj
+ *          Function that takes one argument (request) and returns the object or null
+ */
+exports.put = function(Schema, get_obj) {
+  return function(req, res) {
+    var userid = req.user._id;
+    // Update id
+    var id = req.params.id;
+    var obj = get_obj(req);
+    if (id !== undefined && obj != null) {
+      // Find -> save to use the validation
+      Schema.findOne({
+        _id : id,
+        user : userid
+      }, Schema.publicFields, function(err, doc) {
+        if (err !== null || doc === null) {
+          res.send(400);
+        } else {
+          doc.set(obj);
+          doc.save(exports.send400orID(res));
+        }
+      });
+    } else {
+      res.send(400);
+    }
+  };
+};

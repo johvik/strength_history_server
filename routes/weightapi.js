@@ -15,7 +15,7 @@ exports.getLatest = function(req, res) {
   Weight.latest(userid, util.send400orJSON(res));
 };
 
-exports.post = util.post(Weight, function(req) {
+function get_obj(req) {
   var time = parseInt(req.body.time, 10);
   var weight = parseFloat(req.body.weight);
   if (!isNaN(time) && !isNaN(weight)) {
@@ -25,30 +25,8 @@ exports.post = util.post(Weight, function(req) {
     };
   }
   return null;
-});
+}
 
-exports.put = function(req, res) {
-  var userid = req.user._id;
-  // Update id
-  // body : time, weight
-  var id = req.params.id;
-  var time = parseInt(req.body.time, 10);
-  var weight = parseFloat(req.body.weight);
-  if (id !== undefined && !isNaN(time) && !isNaN(weight)) {
-    // Find -> save to use the validation
-    Weight.findOne({
-      _id : id,
-      user : userid
-    }, Weight.publicFields, function(err, doc) {
-      if (err !== null || doc === null) {
-        res.send(400);
-      } else {
-        doc.time = time;
-        doc.weight = weight;
-        doc.save(util.send400orID(res));
-      }
-    });
-  } else {
-    res.send(400);
-  }
-};
+exports.post = util.post(Weight, get_obj);
+
+exports.put = util.put(Weight, get_obj);

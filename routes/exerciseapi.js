@@ -20,7 +20,7 @@ exports.getLatest = function(req, res) {
   }
 };
 
-exports.post = util.post(Exercise, function(req) {
+function get_obj(req) {
   var name = req.body.name;
   var standardIncrease = parseFloat(req.body.standardIncrease);
   if (name !== undefined && !isNaN(standardIncrease)) {
@@ -30,30 +30,8 @@ exports.post = util.post(Exercise, function(req) {
     };
   }
   return null;
-});
+}
 
-exports.put = function(req, res) {
-  var userid = req.user._id;
-  // Update id
-  // body : name, standardIncrease
-  var id = req.params.id;
-  var name = req.body.name;
-  var standardIncrease = parseFloat(req.body.standardIncrease);
-  if (id !== undefined && name !== undefined && !isNaN(standardIncrease)) {
-    // Find -> save to use the validation
-    Exercise.findOne({
-      _id : id,
-      user : userid
-    }, Exercise.publicFields, function(err, doc) {
-      if (err !== null || doc === null) {
-        res.send(400);
-      } else {
-        doc.name = name;
-        doc.standardIncrease = standardIncrease;
-        doc.save(util.send400orID(res));
-      }
-    });
-  } else {
-    res.send(400);
-  }
-};
+exports.post = util.post(Exercise, get_obj);
+
+exports.put = util.put(Exercise, get_obj);
