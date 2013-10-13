@@ -93,3 +93,25 @@ exports.getId = function(Schema) {
     }
   };
 };
+
+/**
+ * Saves the object from get_obj in Schema for the current user
+ * 
+ * @param Schema
+ *          The database model to get
+ * @param get_obj
+ *          Function that takes one argument (request) and returns the object or null
+ */
+exports.post = function(Schema, get_obj) {
+  return function(req, res) {
+    var userid = req.user._id;
+    // Save
+    var obj = get_obj(req);
+    if (obj !== null) {
+      obj.user = userid;
+      new Schema(obj).save(exports.send400orID(res));
+    } else {
+      res.send(400);
+    }
+  };
+};

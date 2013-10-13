@@ -15,23 +15,17 @@ exports.getLatest = function(req, res) {
   Weight.latest(userid, util.send400orJSON(res));
 };
 
-exports.post = function(req, res) {
-  var userid = req.user._id;
-  // Save
-  // body : time, weight
-  // returns id
+exports.post = util.post(Weight, function(req) {
   var time = parseInt(req.body.time, 10);
   var weight = parseFloat(req.body.weight);
   if (!isNaN(time) && !isNaN(weight)) {
-    new Weight({
+    return {
       time : time,
-      weight : weight,
-      user : userid
-    }).save(util.send400orID(res));
-  } else {
-    res.send(400);
+      weight : weight
+    };
   }
-};
+  return null;
+});
 
 exports.put = function(req, res) {
   var userid = req.user._id;

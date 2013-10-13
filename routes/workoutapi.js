@@ -20,23 +20,17 @@ exports.getLatest = function(req, res) {
   }
 };
 
-exports.post = function(req, res) {
-  var userid = req.user._id;
-  // Save
-  // body : name, exercises
-  // returns id
+exports.post = util.post(Workout, function(req) {
   var name = req.body.name;
   var exercises = req.body.exercises;
   if (name !== undefined && exercises !== undefined) {
-    new Workout({
+    return {
       name : name,
-      exercises : exercises,
-      user : userid
-    }).save(util.send400orID(res));
-  } else {
-    res.send(400);
+      exercises : exercises
+    };
   }
-};
+  return null;
+});
 
 exports.put = function(req, res) {
   var userid = req.user._id;

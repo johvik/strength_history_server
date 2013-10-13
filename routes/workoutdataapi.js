@@ -9,25 +9,19 @@ exports.get = util.get(WorkoutData, {
 
 exports.getId = util.getId(WorkoutData);
 
-exports.post = function(req, res) {
-  var userid = req.user._id;
-  // Save
-  // body : time, workout, data
-  // returns id
+exports.post = util.post(WorkoutData, function(req) {
   var time = parseInt(req.body.time, 10);
   var workout = req.body.workout;
   var data = req.body.data;
   if (!isNaN(time) && workout !== undefined && data !== undefined) {
-    new WorkoutData({
+    return {
       time : time,
       workout : workout,
-      data : data,
-      user : userid
-    }).save(util.send400orID(res));
-  } else {
-    res.send(400);
+      data : data
+    };
   }
-};
+  return null;
+});
 
 exports.put = function(req, res) {
   var userid = req.user._id;
