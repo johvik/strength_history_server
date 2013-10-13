@@ -71,3 +71,25 @@ exports.get = function(Schema, sort) {
     }, exports.send400orJSON(res));
   };
 };
+
+/**
+ * Finds id in Schema for the current user
+ * 
+ * @param Schema
+ *          The database model to get
+ */
+exports.getId = function(Schema) {
+  return function(req, res) {
+    var userid = req.user._id;
+    // Get id
+    var id = req.params.id;
+    if (id !== undefined) {
+      Schema.findOne({
+        _id : id,
+        user : userid
+      }, Schema.publicFields, exports.send400orJSON(res));
+    } else {
+      res.send(400);
+    }
+  };
+};

@@ -7,19 +7,7 @@ exports.get = util.get(Exercise, {
   name : 1
 });
 
-exports.getId = function(req, res) {
-  var userid = req.user._id;
-  // Get id
-  var id = req.params.id;
-  if (id !== undefined) {
-    Exercise.findOne({
-      _id : id,
-      user : userid
-    }, Exercise.publicFields, util.send400orJSON(res));
-  } else {
-    res.send(400);
-  }
-};
+exports.getId = util.getId(Exercise);
 
 exports.getLatest = function(req, res) {
   var userid = req.user._id;
