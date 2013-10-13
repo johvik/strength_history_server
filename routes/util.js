@@ -31,6 +31,28 @@ exports.send400orID = function(res) {
 };
 
 /**
+ * Delete by id in Schema for the current user
+ * 
+ * @param Schema
+ *          The database model to get
+ */
+exports.del = function(Schema) {
+  return function(req, res) {
+    var userid = req.user._id;
+    // Remove id
+    var id = req.params.id;
+    if (id !== undefined) {
+      Schema.remove({
+        _id : id,
+        user : userid
+      }, exports.send400orID(res));
+    } else {
+      res.send(400);
+    }
+  };
+};
+
+/**
  * Finds all in Schema for the current user
  * 
  * @param Schema

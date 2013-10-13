@@ -1,19 +1,7 @@
 var Weight = require('../lib/db/weight').Model;
 var util = require('./util');
 
-exports.del = function(req, res) {
-  var userid = req.user._id;
-  // Remove id
-  var id = req.params.id;
-  if (id !== undefined) {
-    Weight.remove({
-      _id : id,
-      user : userid
-    }, util.send400or200(res));
-  } else {
-    res.send(400);
-  }
-};
+exports.del = util.del(Weight);
 
 exports.get = util.get(Weight, {
   time : -1

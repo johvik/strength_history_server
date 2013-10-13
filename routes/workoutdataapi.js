@@ -1,19 +1,7 @@
 var WorkoutData = require('../lib/db/workoutdata').Model;
 var util = require('./util');
 
-exports.del = function(req, res) {
-  var userid = req.user._id;
-  // Remove id
-  var id = req.params.id;
-  if (id !== undefined) {
-    WorkoutData.remove({
-      _id : id,
-      user : userid
-    }, util.send400or200(res));
-  } else {
-    res.send(400);
-  }
-};
+exports.del = util.del(WorkoutData);
 
 exports.get = util.get(WorkoutData, {
   time : -1
