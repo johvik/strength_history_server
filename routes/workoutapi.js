@@ -25,7 +25,7 @@ exports.get = function(req, res) {
   // Get all
   Workout.find({
     user : userid
-  }, '_id name exercises', {
+  }, Workout.publicFields, {
     sort : {
       name : 1
     }
@@ -46,7 +46,7 @@ exports.getId = function(req, res) {
     Workout.findOne({
       _id : id,
       user : userid
-    }, '_id name exercises', function(err, doc) {
+    }, Workout.publicFields, function(err, doc) {
       if (err !== null || doc === null) {
         res.send(400);
       } else {
@@ -113,7 +113,7 @@ exports.put = function(req, res) {
     Workout.findOne({
       _id : id,
       user : userid
-    }, '_id name exercises', function(err, doc) {
+    }, Workout.publicFields, function(err, doc) {
       if (err !== null || doc === null) {
         res.send(400);
       } else {

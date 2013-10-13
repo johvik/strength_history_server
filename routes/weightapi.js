@@ -25,7 +25,7 @@ exports.get = function(req, res) {
   // Get all
   Weight.find({
     user : userid
-  }, '_id time weight', {
+  }, Weight.publicFields, {
     sort : {
       time : -1
     }
@@ -46,7 +46,7 @@ exports.getId = function(req, res) {
     Weight.findOne({
       _id : id,
       user : userid
-    }, '_id time weight', function(err, doc) {
+    }, Weight.publicFields, function(err, doc) {
       if (err !== null || doc === null) {
         res.send(400);
       } else {
@@ -108,7 +108,7 @@ exports.put = function(req, res) {
     Weight.findOne({
       _id : id,
       user : userid
-    }, '_id time weight', function(err, doc) {
+    }, Weight.publicFields, function(err, doc) {
       if (err !== null || doc === null) {
         res.send(400);
       } else {

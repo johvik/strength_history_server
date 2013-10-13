@@ -10,7 +10,7 @@ exports.get = function(req, res) {
     function(callback) {
       Weight.find({
         user : userid
-      }, '_id time weight',
+      }, Weight.publicFields,
       // {
       // sort : {
       // time : -1
@@ -21,7 +21,7 @@ exports.get = function(req, res) {
     function(callback) {
       WorkoutData.find({
         user : userid
-      }, '_id time workout data',
+      }, WorkoutData.publicFields,
       // {
       // sort : {
       // time : -1
