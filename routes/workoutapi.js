@@ -15,17 +15,9 @@ exports.del = function(req, res) {
   }
 };
 
-exports.get = function(req, res) {
-  var userid = req.user._id;
-  // Get all
-  Workout.find({
-    user : userid
-  }, Workout.publicFields, {
-    sort : {
-      name : 1
-    }
-  }, util.send400orJSON(res));
-};
+exports.get = util.get(Workout, {
+  name : 1
+});
 
 exports.getId = function(req, res) {
   var userid = req.user._id;

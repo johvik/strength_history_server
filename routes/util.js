@@ -29,3 +29,23 @@ exports.send400orID = function(res) {
     }
   };
 };
+
+/**
+ * Finds all in Schema for the current user
+ * 
+ * @param Schema
+ *          The database model to get
+ * @param sort
+ *          Object describing the sort order
+ */
+exports.get = function(Schema, sort) {
+  return function(req, res) {
+    var userid = req.user._id;
+    // Get all
+    Schema.find({
+      user : userid
+    }, Schema.publicFields, {
+      sort : sort
+    }, exports.send400orJSON(res));
+  };
+};
