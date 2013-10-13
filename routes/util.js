@@ -1,31 +1,14 @@
-exports.send400or200 = function(res) {
-  return function(err, doc) {
-    if (err !== null || doc === 0) {
-      res.send(400);
-    } else {
-      res.send(200);
-    }
-  };
-};
-
+/**
+ * If err isn't null or doc is null 400 is sent to res. Otherwise doc is sent via json to res.
+ * 
+ * @returns Returns a function that accepts two arguments err and doc.
+ */
 exports.send400orJSON = function(res) {
   return function(err, doc) {
     if (err !== null || doc === null) {
       res.send(400);
     } else {
       res.json(doc);
-    }
-  };
-};
-
-exports.send400orID = function(res) {
-  return function(err, doc) {
-    if (err !== null || doc === null) {
-      res.send(400);
-    } else {
-      res.json({
-        _id : doc._id
-      });
     }
   };
 };
@@ -45,7 +28,7 @@ exports.del = function(Schema) {
       Schema.remove({
         _id : id,
         user : userid
-      }, exports.send400orID(res));
+      }, exports.send400orJSON(res));
     } else {
       res.send(400);
     }
@@ -105,11 +88,15 @@ exports.getId = function(Schema) {
 exports.post = function(Schema, get_obj) {
   return function(req, res) {
     var userid = req.user._id;
-    // Save
+    // Save sync
+    var sync = parseInt(req.body.sync, 10);
     var obj = get_obj(req);
-    if (obj !== null) {
+    if (!isNaN(sync) && obj !== null) {
       obj.user = userid;
-      new Schema(obj).save(exports.send400orID(res));
+      var now = new Date().getTime();
+      // Use body data if it is less than current time.
+      obj.sync = (sync < now) ? sync : now;
+      new Schema(obj).save(exports.send400orJSON(res));
     } else {
       res.send(400);
     }
@@ -127,10 +114,11 @@ exports.post = function(Schema, get_obj) {
 exports.put = function(Schema, get_obj) {
   return function(req, res) {
     var userid = req.user._id;
-    // Update id
+    // Update id sync
     var id = req.params.id;
+    var sync = parseInt(req.body.sync, 10);
     var obj = get_obj(req);
-    if (id !== undefined && obj != null) {
+    if (id !== undefined && !isNaN(sync) && obj != null) {
       // Find -> save to use the validation
       Schema.findOne({
         _id : id,
@@ -139,8 +127,19 @@ exports.put = function(Schema, get_obj) {
         if (err !== null || doc === null) {
           res.send(400);
         } else {
-          doc.set(obj);
-          doc.save(exports.send400orID(res));
+          var now = new Date().getTime();
+          // Use body data if it is less than current time.
+          sync = (sync < now) ? sync : now;
+          if (sync > doc.sync) {
+            // Update if new sync time is greater than the previous one
+            obj.sync = sync;
+            doc.set(obj);
+            doc.save(exports.send400orJSON(res));
+          } else {
+            // Someone else updated the data before it was synced
+            // Send back the newer data
+            res.json(doc);
+          }
         }
       });
     } else {

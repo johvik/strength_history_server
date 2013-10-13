@@ -74,12 +74,12 @@ exports.getUserData = function(req, res) {
       exercises : function(callback) {
         Exercise.find({
           user : userid
-        }, '_id name standardIncrease', callback);
+        }, Exercise.publicFields, callback);
       },
       workouts : function(callback) {
         Workout.find({
           user : userid
-        }, '_id name exercises', callback);
+        }, Workout.publicFields, callback);
       }
     }, function(err, results) {
       results.authenticated = true;
