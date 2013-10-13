@@ -1,4 +1,5 @@
 var Workout = require('../lib/db/workout').Model;
+var util = require('./util');
 
 exports.del = function(req, res) {
   var userid = req.user._id;
@@ -8,13 +9,7 @@ exports.del = function(req, res) {
     Workout.remove({
       _id : id,
       user : userid
-    }, function(err, doc) {
-      if (err !== null || doc === 0) {
-        res.send(400);
-      } else {
-        res.send(200);
-      }
-    });
+    }, util.send400or200(res));
   } else {
     res.send(400);
   }
@@ -29,13 +24,7 @@ exports.get = function(req, res) {
     sort : {
       name : 1
     }
-  }, function(err, docs) {
-    if (err !== null || docs === null) {
-      res.send(400);
-    } else {
-      res.json(docs);
-    }
-  });
+  }, util.send400orJSON(res));
 };
 
 exports.getId = function(req, res) {
@@ -46,13 +35,7 @@ exports.getId = function(req, res) {
     Workout.findOne({
       _id : id,
       user : userid
-    }, Workout.publicFields, function(err, doc) {
-      if (err !== null || doc === null) {
-        res.send(400);
-      } else {
-        res.json(doc);
-      }
-    });
+    }, Workout.publicFields, util.send400orJSON(res));
   } else {
     res.send(400);
   }
@@ -63,13 +46,7 @@ exports.getLatest = function(req, res) {
   // Latest id
   var id = req.params.id;
   if (id !== undefined) {
-    Workout.latest(userid, id, function(err, doc) {
-      if (err !== null || doc === null) {
-        res.send(400);
-      } else {
-        res.json(doc);
-      }
-    });
+    Workout.latest(userid, id, util.send400orJSON(res));
   } else {
     res.send(400);
   }
@@ -87,15 +64,7 @@ exports.post = function(req, res) {
       name : name,
       exercises : exercises,
       user : userid
-    }).save(function(err, doc) {
-      if (err !== null || doc === null) {
-        res.send(400);
-      } else {
-        res.json({
-          _id : doc._id
-        });
-      }
-    });
+    }).save(util.send400orID(res));
   } else {
     res.send(400);
   }
@@ -119,15 +88,7 @@ exports.put = function(req, res) {
       } else {
         doc.name = name;
         doc.exercises = exercises;
-        doc.save(function(err2, doc2) {
-          if (err2 !== null || doc2 === null) {
-            res.send(400);
-          } else {
-            res.json({
-              _id : doc2._id
-            });
-          }
-        });
+        doc.save(util.send400orID(res));
       }
     });
   } else {

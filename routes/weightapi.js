@@ -1,4 +1,5 @@
 var Weight = require('../lib/db/weight').Model;
+var util = require('./util');
 
 exports.del = function(req, res) {
   var userid = req.user._id;
@@ -8,13 +9,7 @@ exports.del = function(req, res) {
     Weight.remove({
       _id : id,
       user : userid
-    }, function(err, doc) {
-      if (err !== null || doc === 0) {
-        res.send(400);
-      } else {
-        res.send(200);
-      }
-    });
+    }, util.send400or200(res));
   } else {
     res.send(400);
   }
@@ -29,13 +24,7 @@ exports.get = function(req, res) {
     sort : {
       time : -1
     }
-  }, function(err, docs) {
-    if (err !== null || docs === null) {
-      res.send(400);
-    } else {
-      res.json(docs);
-    }
-  });
+  }, util.send400orJSON(res));
 };
 
 exports.getId = function(req, res) {
@@ -46,13 +35,7 @@ exports.getId = function(req, res) {
     Weight.findOne({
       _id : id,
       user : userid
-    }, Weight.publicFields, function(err, doc) {
-      if (err !== null || doc === null) {
-        res.send(400);
-      } else {
-        res.json(doc);
-      }
-    });
+    }, Weight.publicFields, util.send400orJSON(res));
   } else {
     res.send(400);
   }
@@ -61,13 +44,7 @@ exports.getId = function(req, res) {
 exports.getLatest = function(req, res) {
   var userid = req.user._id;
   // Latest
-  Weight.latest(userid, function(err, doc) {
-    if (err !== null || doc === null) {
-      res.send(400);
-    } else {
-      res.json(doc);
-    }
-  });
+  Weight.latest(userid, util.send400orJSON(res));
 };
 
 exports.post = function(req, res) {
@@ -82,15 +59,7 @@ exports.post = function(req, res) {
       time : time,
       weight : weight,
       user : userid
-    }).save(function(err, doc) {
-      if (err !== null || doc === null) {
-        res.send(400);
-      } else {
-        res.json({
-          _id : doc._id
-        });
-      }
-    });
+    }).save(util.send400orID(res));
   } else {
     res.send(400);
   }
@@ -114,15 +83,7 @@ exports.put = function(req, res) {
       } else {
         doc.time = time;
         doc.weight = weight;
-        doc.save(function(err2, doc2) {
-          if (err2 !== null || doc2 === null) {
-            res.send(400);
-          } else {
-            res.json({
-              _id : doc2._id
-            });
-          }
-        });
+        doc.save(util.send400orID(res));
       }
     });
   } else {
