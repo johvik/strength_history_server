@@ -111,5 +111,9 @@ exports.postLogin = function(req, res, next) {
 
 exports.logout = function(req, res) {
   req.logout();
-  res.redirect('/');
+  if (req.query.no_redirect !== undefined) {
+    res.send(200);
+  } else {
+    res.redirect('/');
+  }
 };
