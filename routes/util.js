@@ -1,17 +1,4 @@
-/**
- * If err isn't null or doc is null 400 is sent to res. Otherwise doc is sent via json to res.
- * 
- * @returns Returns a function that accepts two arguments err and doc.
- */
-exports.send400orJSON = function(res) {
-  return function(err, doc) {
-    if (err !== null || doc === null) {
-      res.send(400);
-    } else {
-      res.json(doc);
-    }
-  };
-};
+var SyncTable = require('../lib/db/synctable').Model;
 
 /**
  * Delete by id in Schema for the current user
@@ -28,7 +15,15 @@ exports.del = function(Schema) {
       Schema.remove({
         _id : id,
         user : userid
-      }, exports.send400orJSON(res));
+      }, function(err, doc) {
+        if (err !== null || doc === null) {
+          res.send(400);
+        } else {
+          res.json(doc);
+          // Update the sync table
+          SyncTable.onRemove(Schema.collection.name, userid, id);
+        }
+      });
     } else {
       res.send(400);
     }
@@ -51,7 +46,13 @@ exports.get = function(Schema, sort) {
       user : userid
     }, Schema.publicFields, {
       sort : sort
-    }, exports.send400orJSON(res));
+    }, function(err, doc) {
+      if (err !== null || doc === null) {
+        res.send(400);
+      } else {
+        res.json(doc);
+      }
+    });
   };
 };
 
@@ -70,7 +71,13 @@ exports.getId = function(Schema) {
       Schema.findOne({
         _id : id,
         user : userid
-      }, Schema.publicFields, exports.send400orJSON(res));
+      }, Schema.publicFields, function(err, doc) {
+        if (err !== null || doc === null) {
+          res.send(400);
+        } else {
+          res.json(doc);
+        }
+      });
     } else {
       res.send(400);
     }
@@ -96,7 +103,15 @@ exports.post = function(Schema, get_obj) {
       var now = new Date().getTime();
       // Use body data if it is less than current time.
       obj.sync = (sync < now) ? sync : now;
-      new Schema(obj).save(exports.send400orJSON(res));
+      new Schema(obj).save(function(err, doc) {
+        if (err !== null || doc === null) {
+          res.send(400);
+        } else {
+          res.json(doc);
+          // Update the sync table
+          SyncTable.onAdd(Schema.collection.name, userid, doc._id);
+        }
+      });
     } else {
       res.send(400);
     }
@@ -134,7 +149,13 @@ exports.put = function(Schema, get_obj) {
             // Update if new sync time is greater than the previous one
             obj.sync = sync;
             doc.set(obj);
-            doc.save(exports.send400orJSON(res));
+            doc.save(function(err2, doc2) {
+              if (err2 !== null || doc2 === null) {
+                res.send(400);
+              } else {
+                res.json(doc2);
+              }
+            });
           } else {
             // Someone else updated the data before it was synced
             // Send back the newer data

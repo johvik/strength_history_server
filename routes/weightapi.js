@@ -12,7 +12,13 @@ exports.getId = util.getId(Weight);
 exports.getLatest = function(req, res) {
   var userid = req.user._id;
   // Latest
-  Weight.latest(userid, util.send400orJSON(res));
+  Weight.latest(userid, function(err, doc) {
+    if (err !== null || doc === null) {
+      res.send(400);
+    } else {
+      res.json(doc);
+    }
+  });
 };
 
 function get_obj(req) {

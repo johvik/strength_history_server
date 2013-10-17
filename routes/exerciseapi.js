@@ -14,7 +14,13 @@ exports.getLatest = function(req, res) {
   // Latest id
   var id = req.params.id;
   if (id !== undefined) {
-    Exercise.latest(userid, id, util.send400orJSON(res));
+    Exercise.latest(userid, id, function(err, doc) {
+      if (err !== null || doc === null) {
+        res.send(400);
+      } else {
+        res.json(doc);
+      }
+    });
   } else {
     res.send(400);
   }
