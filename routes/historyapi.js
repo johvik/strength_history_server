@@ -41,7 +41,6 @@ exports.get = function(req, res) {
 exports.getPage = function(req, res) {
   var userid = req.user._id;
   // Pages id
-  // TODO Make it possible to get single pages
 };
 
 exports.getPages = function(req, res) {

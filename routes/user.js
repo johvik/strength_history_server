@@ -6,7 +6,7 @@ var User = require('../lib/db/user').Model;
 var mail = require('../lib/mail');
 
 exports.postSignUp = function(req, res) {
-  return res.send(400, 'Account creation has been disabled during development.'); // TODO Activate signup again
+  return res.send(400, 'Account creation has been disabled during development.');
   var email = req.body.email;
   var password = req.body.password;
   if (email !== undefined && password !== undefined) {
