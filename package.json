@@ -17,5 +17,10 @@
     "bcrypt" : "latest",
     "nodemailer" : "latest"
   },
+  "devDependencies" : {
+    "mocha" : "latest",
+    "should" : "latest",
+    "superagent" : "latest"
+  },
   "engine" : "node >= 0.8.14"
 }
