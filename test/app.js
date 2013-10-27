@@ -10,7 +10,7 @@ describe('Request index.html', function() {
   it('should get root', function(done) {
     request.get('http://localhost:8080/').end(function(err, res) {
       should.not.exist(err);
-      res.should.have.status(200);
+      res.should.have.status(201);
       res.text.should.include('Loading...');
       res.text.should.include('Strength History');
       done();
