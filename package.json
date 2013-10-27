@@ -6,7 +6,7 @@
   "private" : true,
   "scripts" : {
     "start" : "node index.js",
-    "test" : "make test-dist"
+    "test" : "make test-coveralls"
   },
   "dependencies" : {
     "express" : "latest",
@@ -21,7 +21,10 @@
   "devDependencies" : {
     "mocha" : "latest",
     "should" : "latest",
-    "superagent" : "latest"
+    "superagent" : "latest",
+    "jscoverage" : "latest",
+    "mocha-lcov-reporter" : "latest",
+    "coveralls" : "latest"
   },
   "engine" : "node >= 0.8.14"
 }
