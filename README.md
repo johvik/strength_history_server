@@ -1,4 +1,6 @@
-# Strength History Server [![Build Status](https://travis-ci.org/johvik/strength_history_server.png?branch=master)](https://travis-ci.org/johvik/strength_history_server)
+Strength History Server
+=======================
+[![Build Status](https://travis-ci.org/johvik/strength_history_server.png?branch=master)](https://travis-ci.org/johvik/strength_history_server) [![Coverage Status](https://coveralls.io/repos/johvik/strength_history_server/badge.png)](https://coveralls.io/r/johvik/strength_history_server)
 
 A simple server for Strength History to store your data online.
 
