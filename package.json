@@ -24,7 +24,8 @@
     "superagent" : "latest",
     "jscoverage" : "latest",
     "mocha-lcov-reporter" : "latest",
-    "coveralls" : "latest"
+    "coveralls" : "latest",
+    "jshint" : "latest"
   },
   "engine" : "node >= 0.8.14"
 }
