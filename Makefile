@@ -8,7 +8,9 @@ test:
 	@mocha --reporter dot
 
 test-coveralls: lib-cov
+	echo TRAVIS_JOB_ID $(TRAVIS_JOB_ID)
 	@STRENGTH_HISTORY_COV=1 $(MAKE) test-dist REPORTER=mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
+	rm -rf lib-cov
 
 test-cov: lib-cov
 	@mocha --reporter html-cov > coverage.html
