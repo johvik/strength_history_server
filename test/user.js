@@ -1,5 +1,5 @@
 var libPath = process.env.STRENGTH_HISTORY_COV ? '../lib-cov' : '../lib';
-var strength_history = require('../');
+var app = require('../');
 
 var request = require('superagent');
 var should = require('should');
@@ -50,7 +50,7 @@ describe('User', function() {
   describe('Activation', function() {
     it('should not activate', function(done) {
       // Request activation without email
-      request.get('/activate?key=' + testUserActivation).end(function(err, res) {
+      request.get('http://localhost:8080/activate?key=' + testUserActivation).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -59,7 +59,7 @@ describe('User', function() {
 
     it('should not activate', function(done) {
       // Request activation with wrong key
-      request.get('/activate?key=wrong_' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
+      request.get('http://localhost:8080/activate?key=wrong_' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -68,7 +68,7 @@ describe('User', function() {
 
     it('should not login', function(done) {
       // Login without activation
-      request.post('/login').send(testUser).end(function(err, res) {
+      request.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -77,7 +77,7 @@ describe('User', function() {
 
     it('should activate', function(done) {
       // Request activation with correct key
-      request.get('/activate?key=' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
+      request.get('http://localhost:8080/activate?key=' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -86,7 +86,7 @@ describe('User', function() {
 
     it('should login', function(done) {
       // Login after activation
-      request.post('/login').send(testUser).end(function(err, res) {
+      request.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -95,7 +95,7 @@ describe('User', function() {
 
     it('should not activate', function(done) {
       // Request activation again
-      request.get('/activate?key=done&email=' + testUser.email).end(function(err, res) {
+      request.get('http://localhost:8080/activate?key=done&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -110,7 +110,7 @@ describe('User', function() {
     var agent = request.agent();
 
     it('should not get exercises', function(done) {
-      agent.get('/exercise').end(function(err, res) {
+      agent.get('http://localhost:8080/exercise').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -118,7 +118,7 @@ describe('User', function() {
     });
 
     it('should not login', function(done) {
-      agent.post('/login').send({
+      agent.post('http://localhost:8080/login').send({
         email : testUser.email
       }).end(function(err, res) {
         should.not.exist(err);
@@ -128,7 +128,7 @@ describe('User', function() {
     });
 
     it('should login', function(done) {
-      agent.post('/login').send(testUser).end(function(err, res) {
+      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -136,7 +136,7 @@ describe('User', function() {
     });
 
     it('should get exercises', function(done) {
-      agent.get('/exercise').end(function(err, res) {
+      agent.get('http://localhost:8080/exercise').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -144,7 +144,7 @@ describe('User', function() {
     });
 
     it('should logout', function(done) {
-      agent.get('/logout').end(function(err, res) {
+      agent.get('http://localhost:8080/logout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -152,7 +152,7 @@ describe('User', function() {
     });
 
     it('should not get exercises', function(done) {
-      agent.get('/exercise').end(function(err, res) {
+      agent.get('http://localhost:8080/exercise').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
