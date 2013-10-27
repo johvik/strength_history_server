@@ -7,14 +7,17 @@ test-dist:
 test:
 	@mocha --reporter dot
 
-lint:
+lint-dist:
 	./node_modules/.bin/jshint ./lib ./test ./index.js
+
+lint:
+	node node_modules/jshint/bin/jshint ./lib ./test ./index.js
 
 test-coveralls: lib-cov
 	@STRENGTH_HISTORY_COV=1 $(MAKE) test-dist REPORTER=mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
 	rm -rf lib-cov
 	$(MAKE) test-dist REPORTER=spec
-	$(MAKE) lint
+	$(MAKE) lint-dist
 
 test-cov: lib-cov
 	@mocha --reporter html-cov > coverage.html
