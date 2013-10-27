@@ -6,7 +6,7 @@
   "private" : true,
   "scripts" : {
     "start" : "node index.js",
-    "test" : "make test-dist"
+    "test" : "sudo make test-dist"
   },
   "dependencies" : {
     "express" : "latest",
