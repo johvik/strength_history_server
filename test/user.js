@@ -154,7 +154,7 @@ describe('User', function() {
   describe('User data', function() {
     var agent = request.agent();
     it('should get userData', function(done) {
-      var stream = new EventEmitter;
+      var stream = new EventEmitter();
       stream.buf = '';
       stream.writable = true;
       stream.write = function(chunk) {
@@ -176,7 +176,7 @@ describe('User', function() {
     });
 
     it('should get userData', function(done) {
-      var stream = new EventEmitter;
+      var stream = new EventEmitter();
       stream.buf = '';
       stream.writable = true;
       stream.write = function(chunk) {
