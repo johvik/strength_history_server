@@ -2,5 +2,5 @@
 exports.SERVER_ADDRESS = 'http://localhost'; // The root address of your server
 exports.SESSION_SECRET = 'secret'; // Used for express.session
 // This email will be used to send activation e-mails
-exports.EMAIL_ACCOUNT = 'some.email@address.com';
+exports.EMAIL_ACCOUNT = 'some.email@localhost';
 exports.EMAIL_PASSWORD = 'email password';

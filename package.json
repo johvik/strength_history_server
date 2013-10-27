@@ -5,7 +5,8 @@
   "author" : "johvik",
   "private" : true,
   "scripts" : {
-    "start" : "node index.js"
+    "start" : "node index.js",
+    "test" : "make test-dist"
   },
   "dependencies" : {
     "express" : "latest",
