@@ -7,7 +7,7 @@ test-dist:
 test:
 	@mocha --reporter dot
 
-test-coveralls:
+test-coveralls: lib-cov
 	@STRENGTH_HISTORY_COV=1 $(MAKE) test-dist REPORTER=mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
 
 test-cov: lib-cov
