@@ -1,8 +1,10 @@
+var libPath = process.env.STRENGTH_HISTORY_COV ? '../lib-cov' : '../lib';
+var strength_history = require('../');
+
 var request = require('superagent');
 var should = require('should');
 
-var mongoose = require('mongoose');
-var User = require('../lib/db/user').Model;
+var User = require(libPath + '/db/user').Model;
 
 var testUser = {
   email : 'testuser@localhost',
@@ -11,8 +13,6 @@ var testUser = {
 var testUserActivation;
 
 before(function(done) {
-  mongoose.models = {};
-  mongoose.modelSchemas = {};
   // Make sure the test user is removed
   User.remove({
     email : testUser.email
@@ -36,7 +36,6 @@ after(function(done) {
     email : testUser.email
   }, function(err1, doc1) {
     should.not.exist(err1);
-    mongoose.connection.close();
     done();
   });
 });

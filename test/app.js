@@ -1,3 +1,5 @@
+var strength_history = require('../');
+
 var request = require('superagent');
 var should = require('should');
 
