@@ -1,6 +1,8 @@
 @ECHO OFF
 SETLOCAL
 
+set NODE_ENV=test
+
 if "%1%"=="cov" (
   set STRENGTH_HISTORY_COV=1
   mingw32-make test-cov

@@ -13,7 +13,9 @@ exports.testUserActivation = '';
 exports.createUser = function(done) {
   // Make sure the test user is removed first
   User.remove({
-    email : exports.testUser.email
+    email : {
+      $regex : exports.testUser.email + '.*'
+    }
   }, function(err1, doc1) {
     should.not.exist(err1);
     // Create the test user
@@ -31,7 +33,9 @@ exports.createUser = function(done) {
 exports.removeUser = function(done) {
   // Remove the test user
   User.remove({
-    email : exports.testUser.email
+    email : {
+      $regex : exports.testUser.email + '.*'
+    }
   }, function(err1, doc1) {
     should.not.exist(err1);
     done();

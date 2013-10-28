@@ -2,7 +2,7 @@ REPORTER=dot
 
 test-dist:
 	@cp sample_config.js config.js
-	./node_modules/.bin/mocha --reporter $(REPORTER)
+	NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER)
 
 test:
 	@mocha --reporter dot

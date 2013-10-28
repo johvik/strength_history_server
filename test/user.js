@@ -190,11 +190,46 @@ describe('User', function() {
     });
   });
 
-  describe('Sign up', function() {
+  describe('Signup', function() {
     it('should not signup', function(done) {
+      // Email already in use
       request.post('http://localhost:8080/signup').send(utils.testUser).end(function(err, res) {
         should.not.exist(err);
+        res.should.have.status(409);
+        res.text.should.include('E-mail already in use.');
+        done();
+      });
+    });
+
+    it('should not signup', function(done) {
+      // Email already in use
+      request.post('http://localhost:8080/signup').send({
+        email : 'abc',
+        password : 'abc'
+      }).end(function(err, res) {
+        should.not.exist(err);
         res.should.have.status(400);
+        res.text.should.include('Failed to create account, please try again later.');
+        done();
+      });
+    });
+
+    it('should not signup', function(done) {
+      // No post data
+      request.post('http://localhost:8080/signup').end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(400);
+        done();
+      });
+    });
+
+    it('should signup', function(done) {
+      request.post('http://localhost:8080/signup').send({
+        email : utils.testUser.email + '2',
+        password : utils.testUser.password
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
         done();
       });
     });
