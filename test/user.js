@@ -3,13 +3,47 @@ var app = require('../');
 var request = require('superagent');
 var should = require('should');
 
+var utils = require('./test_utils');
+var User = require(utils.libPath + '/db/user').Model;
 var EventEmitter = require('events').EventEmitter;
 
-var utils = require('./test_utils');
+var testUser = {
+  email : 'testuser2@localhost',
+  password : 'testing'
+};
+var testUserActivation = '';
 
-before(utils.createUser);
+before(function(done) {
+  // Make sure the test user is removed first
+  User.remove({
+    email : {
+      $regex : testUser.email + '.*'
+    }
+  }, function(err1, doc1) {
+    should.not.exist(err1);
+    // Create the test user
+    new User({
+      email : testUser.email,
+      password : testUser.password
+    }).save(function(err2, doc2) {
+      should.not.exist(err2);
+      testUserActivation = doc2.activation;
+      done();
+    });
+  });
+});
 
-after(utils.removeUser);
+after(function(done) {
+  // Remove the test user
+  User.remove({
+    email : {
+      $regex : testUser.email + '.*'
+    }
+  }, function(err1, doc1) {
+    should.not.exist(err1);
+    done();
+  });
+});
 
 /**
  * Test the User
@@ -21,7 +55,7 @@ describe('User', function() {
   describe('Activation', function() {
     it('should not activate', function(done) {
       // Request activation without email
-      request.get('http://localhost:8080/activate?key=' + utils.testUserActivation).end(function(err, res) {
+      request.get('http://localhost:8080/activate?key=' + testUserActivation).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -30,7 +64,7 @@ describe('User', function() {
 
     it('should not activate', function(done) {
       // Request activation with wrong key
-      request.get('http://localhost:8080/activate?key=wrong_' + utils.testUserActivation + '&email=' + utils.testUser.email).end(function(err, res) {
+      request.get('http://localhost:8080/activate?key=wrong_' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -39,7 +73,7 @@ describe('User', function() {
 
     it('should not login', function(done) {
       // Login without activation
-      request.post('http://localhost:8080/login').send(utils.testUser).end(function(err, res) {
+      request.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -48,7 +82,7 @@ describe('User', function() {
 
     it('should activate', function(done) {
       // Request activation with correct key
-      request.get('http://localhost:8080/activate?key=' + utils.testUserActivation + '&email=' + utils.testUser.email).end(function(err, res) {
+      request.get('http://localhost:8080/activate?key=' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -57,7 +91,7 @@ describe('User', function() {
 
     it('should login', function(done) {
       // Login after activation
-      request.post('http://localhost:8080/login').send(utils.testUser).end(function(err, res) {
+      request.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -66,7 +100,7 @@ describe('User', function() {
 
     it('should not activate', function(done) {
       // Request activation again
-      request.get('http://localhost:8080/activate?key=done&email=' + utils.testUser.email).end(function(err, res) {
+      request.get('http://localhost:8080/activate?key=done&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -90,7 +124,7 @@ describe('User', function() {
 
     it('should not login', function(done) {
       agent.post('http://localhost:8080/login').send({
-        email : utils.testUser.email
+        email : testUser.email
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -99,7 +133,7 @@ describe('User', function() {
     });
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(utils.testUser).end(function(err, res) {
+      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -133,7 +167,7 @@ describe('User', function() {
     it('should not login', function(done) {
       // Wrong password
       request.post('http://localhost:8080/login').send({
-        email : utils.testUser.email,
+        email : testUser.email,
         password : 'abc'
       }).end(function(err, res) {
         should.not.exist(err);
@@ -168,7 +202,7 @@ describe('User', function() {
     });
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(utils.testUser).end(function(err, res) {
+      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -193,7 +227,7 @@ describe('User', function() {
   describe('Signup', function() {
     it('should not signup', function(done) {
       // Email already in use
-      request.post('http://localhost:8080/signup').send(utils.testUser).end(function(err, res) {
+      request.post('http://localhost:8080/signup').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(409);
         res.text.should.include('E-mail already in use.');
@@ -225,8 +259,8 @@ describe('User', function() {
 
     it('should signup', function(done) {
       request.post('http://localhost:8080/signup').send({
-        email : utils.testUser.email + '2',
-        password : utils.testUser.password
+        email : testUser.email + '2',
+        password : testUser.password
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);

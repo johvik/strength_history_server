@@ -1,3 +1,4 @@
+var request = require('superagent');
 var should = require('should');
 
 exports.libPath = process.env.STRENGTH_HISTORY_COV ? '../lib-cov' : '../lib';
@@ -8,34 +9,31 @@ exports.testUser = {
   email : 'testuser@localhost',
   password : 'testing'
 };
-exports.testUserActivation = '';
+
+exports.testUserId = '';
 
 exports.createUser = function(done) {
-  // Make sure the test user is removed first
-  User.remove({
-    email : {
-      $regex : exports.testUser.email + '.*'
-    }
-  }, function(err1, doc1) {
-    should.not.exist(err1);
-    // Create the test user
-    new User({
-      email : exports.testUser.email,
-      password : exports.testUser.password
-    }).save(function(err2, doc2) {
-      should.not.exist(err2);
-      exports.testUserActivation = doc2.activation;
+  // Create the test user
+  new User({
+    email : exports.testUser.email,
+    password : exports.testUser.password
+  }).save(function(err, doc) {
+    if (err === null) {
+      exports.testUserId = doc._id;
+      // Activate
+      request.get('http://localhost:8080/activate?key=' + doc.activation + '&email=' + exports.testUser.email).end(function(err2, res) {
+        done();
+      });
+    } else {
       done();
-    });
+    }
   });
 };
 
 exports.removeUser = function(done) {
   // Remove the test user
   User.remove({
-    email : {
-      $regex : exports.testUser.email + '.*'
-    }
+    email : exports.testUser.email
   }, function(err1, doc1) {
     should.not.exist(err1);
     done();
