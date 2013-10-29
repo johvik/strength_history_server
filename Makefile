@@ -1,11 +1,11 @@
-REPORTER=dot
+REPORTER=spec
 
 test-dist:
 	@cp sample_config.js config.js
 	NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER)
 
 test:
-	@mocha --reporter dot
+	@mocha --reporter $(REPORTER)
 
 lint-dist:
 	./node_modules/.bin/jshint ./lib ./test ./index.js
