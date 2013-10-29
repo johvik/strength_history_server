@@ -8,15 +8,15 @@ var utils = require('./test_utils');
 before(utils.createUser);
 
 /**
- * Test exercise
+ * Test weight
  */
-describe('Exercise', function() {
+describe('Weight', function() {
   /**
    * Test that you cannot access data when not logged in
    */
   describe('Unauthorized check', function() {
     it('should not del', function(done) {
-      request.del('http://localhost:8080/exercise/id').end(function(err, res) {
+      request.del('http://localhost:8080/weight/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -24,7 +24,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/exercise/id').end(function(err, res) {
+      request.get('http://localhost:8080/weight/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -32,7 +32,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/exercise/latest/id').end(function(err, res) {
+      request.get('http://localhost:8080/weight/latest').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -40,7 +40,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/exercise').end(function(err, res) {
+      request.get('http://localhost:8080/weight').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -48,7 +48,7 @@ describe('Exercise', function() {
     });
 
     it('should not save', function(done) {
-      request.post('http://localhost:8080/exercise').end(function(err, res) {
+      request.post('http://localhost:8080/weight').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -56,7 +56,7 @@ describe('Exercise', function() {
     });
 
     it('should not update', function(done) {
-      request.get('http://localhost:8080/exercise/id').end(function(err, res) {
+      request.get('http://localhost:8080/weight/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -79,7 +79,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      agent.get('http://localhost:8080/exercise/latest/id').end(function(err, res) {
+      agent.get('http://localhost:8080/weight/latest').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -87,7 +87,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      agent.get('http://localhost:8080/exercise/id').end(function(err, res) {
+      agent.get('http://localhost:8080/weight/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -95,7 +95,7 @@ describe('Exercise', function() {
     });
 
     it('should not del', function(done) {
-      agent.del('http://localhost:8080/exercise/id').end(function(err, res) {
+      agent.del('http://localhost:8080/weight/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -103,7 +103,7 @@ describe('Exercise', function() {
     });
 
     it('should not post', function(done) {
-      agent.post('http://localhost:8080/exercise').end(function(err, res) {
+      agent.post('http://localhost:8080/weight').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -111,10 +111,10 @@ describe('Exercise', function() {
     });
 
     it('should not post', function(done) {
-      agent.post('http://localhost:8080/exercise').send({
+      agent.post('http://localhost:8080/weight').send({
         sync : 123,
-        name : '',
-        standardIncrease : 2.5
+        time : 123,
+        weight : 'abc'
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -123,7 +123,7 @@ describe('Exercise', function() {
     });
 
     it('should not put', function(done) {
-      agent.put('http://localhost:8080/exercise/id').end(function(err, res) {
+      agent.put('http://localhost:8080/weight/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -131,10 +131,10 @@ describe('Exercise', function() {
     });
 
     it('should not put', function(done) {
-      agent.put('http://localhost:8080/exercise/id').send({
+      agent.put('http://localhost:8080/weight/id').send({
         sync : 123,
-        name : 'abc',
-        standardIncrease : 2.5
+        time : 456,
+        weight : 75.5
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -159,75 +159,86 @@ describe('Exercise', function() {
     });
 
     it('should post', function(done) {
-      agent.post('http://localhost:8080/exercise').send({
+      agent.post('http://localhost:8080/weight').send({
         sync : 123,
-        name : 'abc',
-        standardIncrease : 2.5
+        time : 456,
+        weight : 75.5
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('abc');
-        res.text.should.include('2.5');
-        var exercise = JSON.parse(res.text);
-        should.exist(exercise._id);
-        savedId = exercise._id;
+        res.text.should.include('456');
+        res.text.should.include('75.5');
+        var weight = JSON.parse(res.text);
+        should.exist(weight._id);
+        savedId = weight._id;
         done();
       });
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/exercise').end(function(err, res) {
+      agent.get('http://localhost:8080/weight').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('abc');
-        res.text.should.include('2.5');
+        res.text.should.include('456');
+        res.text.should.include('75.5');
         res.text.should.include(savedId);
         done();
       });
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/exercise/' + savedId).end(function(err, res) {
+      agent.get('http://localhost:8080/weight/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('abc');
-        res.text.should.include('2.5');
+        res.text.should.include('456');
+        res.text.should.include('75.5');
+        res.text.should.include(savedId);
+        done();
+      });
+    });
+
+    it('should get', function(done) {
+      agent.get('http://localhost:8080/weight/latest').end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        res.text.should.include('456');
+        res.text.should.include('75.5');
         res.text.should.include(savedId);
         done();
       });
     });
 
     it('should put', function(done) {
-      agent.put('http://localhost:8080/exercise/' + savedId).send({
+      agent.put('http://localhost:8080/weight/' + savedId).send({
         sync : 123,
-        name : 'ABC',
-        standardIncrease : 7.5
+        time : 789,
+        weight : 99.9
       }).end(function(err, res) {
         // Should not update because of sync
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('abc');
-        res.text.should.include('2.5');
+        res.text.should.include('456');
+        res.text.should.include('75.5');
         done();
       });
     });
 
     it('should put', function(done) {
-      agent.put('http://localhost:8080/exercise/' + savedId).send({
+      agent.put('http://localhost:8080/weight/' + savedId).send({
         sync : new Date().getTime() + 100000, // Make sure sync is big enough
-        name : 'ABC',
-        standardIncrease : 7.5
+        time : 789,
+        weight : 99.9
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('ABC');
-        res.text.should.include('7.5');
+        res.text.should.include('789');
+        res.text.should.include('99.9');
         done();
       });
     });
 
     it('should del', function(done) {
-      agent.del('http://localhost:8080/exercise/' + savedId).end(function(err, res) {
+      agent.del('http://localhost:8080/weight/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
