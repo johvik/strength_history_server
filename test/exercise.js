@@ -160,17 +160,18 @@ describe('Exercise', function() {
 
     it('should post', function(done) {
       agent.post('http://localhost:8080/exercise').send({
-        sync : 123,
         name : 'abc',
-        standardIncrease : 2.5
+        standardIncrease : 2.5,
+        sync : 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('abc');
-        res.text.should.include('2.5');
-        var exercise = JSON.parse(res.text);
-        should.exist(exercise._id);
-        savedId = exercise._id;
+        var json = JSON.parse(res.text);
+        json.should.have.property('name', 'abc');
+        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        savedId = json._id;
         done();
       });
     });
@@ -179,9 +180,14 @@ describe('Exercise', function() {
       agent.get('http://localhost:8080/exercise').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('abc');
-        res.text.should.include('2.5');
-        res.text.should.include(savedId);
+        var json = JSON.parse(res.text);
+        json.should.have.length(1);
+        var o = json[0];
+        o.should.have.property('_id', savedId);
+        o.should.have.property('name', 'abc');
+        o.should.have.property('standardIncrease', 2.5);
+        o.should.have.property('sync', 123);
+        o.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
         done();
       });
     });
@@ -190,38 +196,50 @@ describe('Exercise', function() {
       agent.get('http://localhost:8080/exercise/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('abc');
-        res.text.should.include('2.5');
-        res.text.should.include(savedId);
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.property('name', 'abc');
+        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
         done();
       });
     });
 
     it('should put', function(done) {
       agent.put('http://localhost:8080/exercise/' + savedId).send({
-        sync : 123,
         name : 'ABC',
-        standardIncrease : 7.5
+        standardIncrease : 7.5,
+        sync : 123
       }).end(function(err, res) {
         // Should not update because of sync
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('abc');
-        res.text.should.include('2.5');
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.property('name', 'abc');
+        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
         done();
       });
     });
 
     it('should put', function(done) {
       agent.put('http://localhost:8080/exercise/' + savedId).send({
-        sync : new Date().getTime() + 100000, // Make sure sync is big enough
         name : 'ABC',
-        standardIncrease : 7.5
+        standardIncrease : 7.5,
+        // Make sure sync is bigger
+        sync : 100000
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('ABC');
-        res.text.should.include('7.5');
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.property('name', 'ABC');
+        json.should.have.property('standardIncrease', 7.5);
+        json.should.have.property('sync', 100000);
+        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
         done();
       });
     });
@@ -230,6 +248,9 @@ describe('Exercise', function() {
       agent.del('http://localhost:8080/exercise/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.keys('_id');
         done();
       });
     });

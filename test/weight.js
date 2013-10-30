@@ -160,17 +160,18 @@ describe('Weight', function() {
 
     it('should post', function(done) {
       agent.post('http://localhost:8080/weight').send({
-        sync : 123,
         time : 456,
-        weight : 75.5
+        weight : 75.5,
+        sync : 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('456');
-        res.text.should.include('75.5');
-        var weight = JSON.parse(res.text);
-        should.exist(weight._id);
-        savedId = weight._id;
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('weight', 75.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'weight', 'sync');
+        savedId = json._id;
         done();
       });
     });
@@ -179,9 +180,14 @@ describe('Weight', function() {
       agent.get('http://localhost:8080/weight').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('456');
-        res.text.should.include('75.5');
-        res.text.should.include(savedId);
+        var json = JSON.parse(res.text);
+        json.should.have.length(1);
+        var o = json[0];
+        o.should.have.property('_id', savedId);
+        o.should.have.property('time', 456);
+        o.should.have.property('weight', 75.5);
+        o.should.have.property('sync', 123);
+        o.should.have.keys('_id', 'time', 'weight', 'sync');
         done();
       });
     });
@@ -190,9 +196,12 @@ describe('Weight', function() {
       agent.get('http://localhost:8080/weight/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('456');
-        res.text.should.include('75.5');
-        res.text.should.include(savedId);
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.property('time', 456);
+        json.should.have.property('weight', 75.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'weight', 'sync');
         done();
       });
     });
@@ -201,38 +210,50 @@ describe('Weight', function() {
       agent.get('http://localhost:8080/weight/latest').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('456');
-        res.text.should.include('75.5');
-        res.text.should.include(savedId);
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.property('time', 456);
+        json.should.have.property('weight', 75.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'weight', 'sync');
         done();
       });
     });
 
     it('should put', function(done) {
       agent.put('http://localhost:8080/weight/' + savedId).send({
-        sync : 123,
         time : 789,
-        weight : 99.9
+        weight : 99.9,
+        sync : 123
       }).end(function(err, res) {
         // Should not update because of sync
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('456');
-        res.text.should.include('75.5');
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.property('time', 456);
+        json.should.have.property('weight', 75.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'weight', 'sync');
         done();
       });
     });
 
     it('should put', function(done) {
       agent.put('http://localhost:8080/weight/' + savedId).send({
-        sync : new Date().getTime() + 100000, // Make sure sync is big enough
         time : 789,
-        weight : 99.9
+        weight : 99.9,
+        // Make sure sync is bigger
+        sync : 100000
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        res.text.should.include('789');
-        res.text.should.include('99.9');
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.property('time', 789);
+        json.should.have.property('weight', 99.9);
+        json.should.have.property('sync', 100000);
+        json.should.have.keys('_id', 'time', 'weight', 'sync');
         done();
       });
     });
@@ -241,6 +262,9 @@ describe('Weight', function() {
       agent.del('http://localhost:8080/weight/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('_id', savedId);
+        json.should.have.keys('_id');
         done();
       });
     });
