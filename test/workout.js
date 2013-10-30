@@ -8,15 +8,15 @@ var utils = require('./test_utils');
 before(utils.createUser);
 
 /**
- * Test exercise
+ * Test workout
  */
-describe('Exercise', function() {
+describe('Workout', function() {
   /**
    * Test that you cannot access data when not logged in
    */
   describe('Unauthorized check', function() {
     it('should not del', function(done) {
-      request.del('http://localhost:8080/exercise/id').end(function(err, res) {
+      request.del('http://localhost:8080/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -24,7 +24,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/exercise/id').end(function(err, res) {
+      request.get('http://localhost:8080/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -32,7 +32,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/exercise/latest/id').end(function(err, res) {
+      request.get('http://localhost:8080/workout/latest/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -40,7 +40,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/exercise').end(function(err, res) {
+      request.get('http://localhost:8080/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -48,7 +48,7 @@ describe('Exercise', function() {
     });
 
     it('should not save', function(done) {
-      request.post('http://localhost:8080/exercise').end(function(err, res) {
+      request.post('http://localhost:8080/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -56,7 +56,7 @@ describe('Exercise', function() {
     });
 
     it('should not update', function(done) {
-      request.get('http://localhost:8080/exercise/id').end(function(err, res) {
+      request.get('http://localhost:8080/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -79,7 +79,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      agent.get('http://localhost:8080/exercise/latest/id').end(function(err, res) {
+      agent.get('http://localhost:8080/workout/latest/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -87,7 +87,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      agent.get('http://localhost:8080/exercise/id').end(function(err, res) {
+      agent.get('http://localhost:8080/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -95,7 +95,7 @@ describe('Exercise', function() {
     });
 
     it('should not del', function(done) {
-      agent.del('http://localhost:8080/exercise/id').end(function(err, res) {
+      agent.del('http://localhost:8080/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -103,7 +103,7 @@ describe('Exercise', function() {
     });
 
     it('should not post', function(done) {
-      agent.post('http://localhost:8080/exercise').end(function(err, res) {
+      agent.post('http://localhost:8080/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -111,9 +111,9 @@ describe('Exercise', function() {
     });
 
     it('should not post', function(done) {
-      agent.post('http://localhost:8080/exercise').send({
+      agent.post('http://localhost:8080/workout').send({
         name : '',
-        standardIncrease : 2.5,
+        exercises : [],
         sync : 123
       }).end(function(err, res) {
         should.not.exist(err);
@@ -123,7 +123,7 @@ describe('Exercise', function() {
     });
 
     it('should not put', function(done) {
-      agent.put('http://localhost:8080/exercise/id').end(function(err, res) {
+      agent.put('http://localhost:8080/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -131,9 +131,9 @@ describe('Exercise', function() {
     });
 
     it('should not put', function(done) {
-      agent.put('http://localhost:8080/exercise/id').send({
+      agent.put('http://localhost:8080/workout/id').send({
         name : 'abc',
-        standardIncrease : 2.5,
+        exercises : [],
         sync : 123
       }).end(function(err, res) {
         should.not.exist(err);
@@ -159,25 +159,25 @@ describe('Exercise', function() {
     });
 
     it('should post', function(done) {
-      agent.post('http://localhost:8080/exercise').send({
+      agent.post('http://localhost:8080/workout').send({
         name : 'abc',
-        standardIncrease : 2.5,
+        exercises : [],
         sync : 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
         json.should.have.property('name', 'abc');
-        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('exercises').and.have.length(0);
         json.should.have.property('sync', 123);
-        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
         savedId = json._id;
         done();
       });
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/exercise').end(function(err, res) {
+      agent.get('http://localhost:8080/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
@@ -185,31 +185,31 @@ describe('Exercise', function() {
         var o = json[0];
         o.should.have.property('_id', savedId);
         o.should.have.property('name', 'abc');
-        o.should.have.property('standardIncrease', 2.5);
+        o.should.have.property('exercises').and.have.length(0);
         o.should.have.property('sync', 123);
-        o.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        o.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
       });
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/exercise/' + savedId).end(function(err, res) {
+      agent.get('http://localhost:8080/workout/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'abc');
-        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('exercises').and.have.length(0);
         json.should.have.property('sync', 123);
-        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
       });
     });
 
     it('should put', function(done) {
-      agent.put('http://localhost:8080/exercise/' + savedId).send({
+      agent.put('http://localhost:8080/workout/' + savedId).send({
         name : 'ABC',
-        standardIncrease : 7.5,
+        exercises : [],
         sync : 123
       }).end(function(err, res) {
         // Should not update because of sync
@@ -218,17 +218,17 @@ describe('Exercise', function() {
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'abc');
-        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('exercises').and.have.length(0);
         json.should.have.property('sync', 123);
-        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
       });
     });
 
     it('should put', function(done) {
-      agent.put('http://localhost:8080/exercise/' + savedId).send({
+      agent.put('http://localhost:8080/workout/' + savedId).send({
         name : 'ABC',
-        standardIncrease : 7.5,
+        exercises : [],
         // Make sure sync is bigger
         sync : 100000
       }).end(function(err, res) {
@@ -237,15 +237,15 @@ describe('Exercise', function() {
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'ABC');
-        json.should.have.property('standardIncrease', 7.5);
+        json.should.have.property('exercises').and.have.length(0);
         json.should.have.property('sync', 100000);
-        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
       });
     });
 
     it('should del', function(done) {
-      agent.del('http://localhost:8080/exercise/' + savedId).end(function(err, res) {
+      agent.del('http://localhost:8080/workout/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);

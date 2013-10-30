@@ -112,9 +112,9 @@ describe('Weight', function() {
 
     it('should not post', function(done) {
       agent.post('http://localhost:8080/weight').send({
-        sync : 123,
         time : 123,
-        weight : 'abc'
+        weight : 'abc',
+        sync : 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -132,9 +132,9 @@ describe('Weight', function() {
 
     it('should not put', function(done) {
       agent.put('http://localhost:8080/weight/id').send({
-        sync : 123,
         time : 456,
-        weight : 75.5
+        weight : 75.5,
+        sync : 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
