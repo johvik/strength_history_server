@@ -176,6 +176,18 @@ describe('User', function() {
       });
     });
 
+    it('should not login', function(done) {
+      // Unknown email
+      request.post('http://localhost:8080/login').send({
+        email : testUser.email + 'abc',
+        password : 'abc'
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(400);
+        done();
+      });
+    });
+
     it('should logout', function(done) {
       request.get('http://localhost:8080/logout?no_redirect').end(function(err, res) {
         should.not.exist(err);
