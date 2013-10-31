@@ -8,7 +8,7 @@ var utils = require('./test_utils');
 /**
  * Test workoutdata
  */
-describe('workoutdata', function() {
+describe('WorkoutData', function() {
   var testUser = {};
 
   before(function(done) {
