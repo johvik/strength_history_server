@@ -179,7 +179,7 @@ describe('Workout', function() {
         res.should.have.status(200);
         var json = JSON.parse(res.text);
         json.should.have.property('name', 'abc');
-        json.should.have.property('exercises').and.have.length(0);
+        json.should.have.property('exercises').and.eql([]);
         json.should.have.property('sync', 123);
         json.should.have.keys('_id', 'name', 'exercises', 'sync');
         savedId = json._id;
@@ -196,7 +196,7 @@ describe('Workout', function() {
         var o = json[0];
         o.should.have.property('_id', savedId);
         o.should.have.property('name', 'abc');
-        o.should.have.property('exercises').and.have.length(0);
+        o.should.have.property('exercises').and.eql([]);
         o.should.have.property('sync', 123);
         o.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
@@ -210,7 +210,7 @@ describe('Workout', function() {
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'abc');
-        json.should.have.property('exercises').and.have.length(0);
+        json.should.have.property('exercises').and.eql([]);
         json.should.have.property('sync', 123);
         json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
@@ -229,7 +229,7 @@ describe('Workout', function() {
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'abc');
-        json.should.have.property('exercises').and.have.length(0);
+        json.should.have.property('exercises').and.eql([]);
         json.should.have.property('sync', 123);
         json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
@@ -248,7 +248,7 @@ describe('Workout', function() {
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'ABC');
-        json.should.have.property('exercises').and.have.length(0);
+        json.should.have.property('exercises').and.eql([]);
         json.should.have.property('sync', 100000);
         json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();

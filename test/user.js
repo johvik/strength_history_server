@@ -12,10 +12,11 @@ var EventEmitter = require('events').EventEmitter;
  */
 describe('User', function() {
   var testUser = {
-    email : 'testuser2@localhost',
+    email : 'testuser@localhost',
     password : 'testing'
   };
   var testUserActivation = '';
+  var testUser2 = {};
 
   before(function(done) {
     // Make sure the test user is removed first
@@ -32,7 +33,11 @@ describe('User', function() {
       }).save(function(err2, doc2) {
         should.not.exist(err2);
         testUserActivation = doc2.activation;
-        done();
+        // Create an additional user to use for erase test
+        utils.createUser('user', function(user) {
+          testUser2 = user;
+          done();
+        });
       });
     });
   });
@@ -45,7 +50,8 @@ describe('User', function() {
       }
     }, function(err1, doc1) {
       should.not.exist(err1);
-      done();
+      // Also remove the other test user
+      utils.removeUser('user', done);
     });
   });
 
@@ -197,6 +203,9 @@ describe('User', function() {
     });
   });
 
+  /**
+   * Test the user data
+   */
   describe('User data', function() {
     var agent = request.agent();
     it('should get userData', function(done) {
@@ -236,6 +245,9 @@ describe('User', function() {
     });
   });
 
+  /**
+   * Test signup
+   */
   describe('Signup', function() {
     it('should not signup', function(done) {
       // Email already in use
@@ -276,6 +288,208 @@ describe('User', function() {
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
+        done();
+      });
+    });
+  });
+
+  /**
+   * Test erase
+   */
+  describe('Erase', function() {
+    var agent1 = request.agent();
+    var agent2 = request.agent();
+    var savedWorkout1 = '';
+    var savedWorkout2 = '';
+
+    it('should login', function(done) {
+      agent1.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        done();
+      });
+    });
+
+    it('should login', function(done) {
+      agent2.post('http://localhost:8080/login').send(testUser2).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        done();
+      });
+    });
+
+    // First create data for both test users
+    it('should post', function(done) {
+      agent1.post('http://localhost:8080/exercise').send({
+        name : 'abc',
+        standardIncrease : 2.5,
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('name', 'abc');
+        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        done();
+      });
+    });
+
+    it('should post', function(done) {
+      agent2.post('http://localhost:8080/exercise').send({
+        name : 'abc',
+        standardIncrease : 2.5,
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('name', 'abc');
+        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        done();
+      });
+    });
+
+    it('should post', function(done) {
+      agent1.post('http://localhost:8080/weight').send({
+        time : 456,
+        weight : 75.5,
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('weight', 75.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'weight', 'sync');
+        done();
+      });
+    });
+
+    it('should post', function(done) {
+      agent2.post('http://localhost:8080/weight').send({
+        time : 456,
+        weight : 75.5,
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('weight', 75.5);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'weight', 'sync');
+        done();
+      });
+    });
+
+    it('should post', function(done) {
+      agent1.post('http://localhost:8080/workout').send({
+        name : 'abc',
+        exercises : [],
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('name', 'abc');
+        json.should.have.property('exercises').and.eql([]);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
+        savedWorkout1 = json._id;
+        done();
+      });
+    });
+
+    it('should post', function(done) {
+      agent2.post('http://localhost:8080/workout').send({
+        name : 'abc',
+        exercises : [],
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('name', 'abc');
+        json.should.have.property('exercises').and.eql([]);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
+        savedWorkout2 = json._id;
+        done();
+      });
+    });
+
+    it('should post', function(done) {
+      agent1.post('http://localhost:8080/workoutdata').send({
+        time : 456,
+        workout : savedWorkout1,
+        data : [],
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('workout', savedWorkout1);
+        json.should.have.property('data').and.eql([]);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'workout', 'data', 'sync');
+        savedId = json._id;
+        done();
+      });
+    });
+
+    it('should post', function(done) {
+      agent2.post('http://localhost:8080/workoutdata').send({
+        time : 456,
+        workout : savedWorkout2,
+        data : [],
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('workout', savedWorkout2);
+        json.should.have.property('data').and.eql([]);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'workout', 'data', 'sync');
+        savedId = json._id;
+        done();
+      });
+    });
+
+    it('should erase', function(done) {
+      User.erase(testUser.email, function(err, res) {
+        should.not.exist(err);
+        res.should.eql([
+          1,
+          1,
+          4,
+          1,
+          1,
+          1
+        ]);
+        done();
+      });
+    });
+
+    it('should erase', function(done) {
+      // Check that the other delete didn't mess up the other one
+      User.erase(testUser2.email, function(err, res) {
+        should.not.exist(err);
+        res.should.eql([
+          1,
+          1,
+          4,
+          1,
+          1,
+          1
+        ]);
         done();
       });
     });
