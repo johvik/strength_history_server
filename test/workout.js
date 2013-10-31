@@ -187,6 +187,44 @@ describe('Workout', function() {
       });
     });
 
+    it('should post', function(done) {
+      agent.post('http://localhost:8080/workoutdata').send({
+        time : 456,
+        workout : savedId,
+        data : [],
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('workout', savedId);
+        json.should.have.property('data').and.eql([]);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'workout', 'data', 'sync');
+        done();
+      });
+    });
+
+    it('should get', function(done) {
+      agent.get('http://localhost:8080/workout/latest/' + savedId).send({
+        time : 456,
+        workout : savedId,
+        data : [],
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('workout', savedId);
+        json.should.have.property('data').and.eql([]);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'workout', 'data', 'sync');
+        done();
+      });
+    });
+
     it('should get', function(done) {
       agent.get('http://localhost:8080/workout').end(function(err, res) {
         should.not.exist(err);

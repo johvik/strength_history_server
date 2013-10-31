@@ -187,6 +187,93 @@ describe('Exercise', function() {
       });
     });
 
+    it('should post', function(done) {
+      agent.post('http://localhost:8080/workout').send({
+        name : 'abc',
+        exercises : [
+          savedId
+        ],
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('name', 'abc');
+        json.should.have.property('exercises').and.eql([
+          savedId
+        ]);
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
+        savedWorkout = json._id;
+        done();
+      });
+    });
+
+    it('should post', function(done) {
+      agent.post('http://localhost:8080/workoutdata').send({
+        time : 456,
+        workout : savedWorkout,
+        data : [
+          {
+            exercise : savedId,
+            sets : [
+              {
+                weight : 55.2,
+                reps : 12
+              }
+            ]
+          }
+        ],
+        sync : 123
+      }).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('workout', savedWorkout);
+        json.should.have.property('data');
+        var data = json.data;
+        data.should.have.length(1);
+        var o = data[0];
+        o.should.have.property('exercise', savedId);
+        o.should.have.property('sets');
+        var sets = o.sets;
+        sets.should.have.length(1);
+        sets[0].should.have.property('weight', 55.2);
+        sets[0].should.have.property('reps', 12);
+        sets[0].should.have.keys('weight', 'reps');
+        o.should.have.keys('exercise', 'sets');
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'workout', 'data', 'sync');
+        done();
+      });
+    });
+
+    it('should get', function(done) {
+      agent.get('http://localhost:8080/exercise/latest/' + savedId).end(function(err, res) {
+        should.not.exist(err);
+        res.should.have.status(200);
+        var json = JSON.parse(res.text);
+        json.should.have.property('time', 456);
+        json.should.have.property('workout', savedWorkout);
+        json.should.have.property('data');
+        var data = json.data;
+        data.should.have.length(1);
+        var o = data[0];
+        o.should.have.property('exercise', savedId);
+        o.should.have.property('sets');
+        var sets = o.sets;
+        sets.should.have.length(1);
+        sets[0].should.have.property('weight', 55.2);
+        sets[0].should.have.property('reps', 12);
+        sets[0].should.have.keys('weight', 'reps');
+        o.should.have.keys('exercise', 'sets');
+        json.should.have.property('sync', 123);
+        json.should.have.keys('_id', 'time', 'workout', 'data', 'sync');
+        done();
+      });
+    });
+
     it('should get', function(done) {
       agent.get('http://localhost:8080/exercise').end(function(err, res) {
         should.not.exist(err);
