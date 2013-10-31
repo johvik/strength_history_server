@@ -66,8 +66,8 @@ describe('Exercise', function() {
       });
     });
 
-    it('should not update', function(done) {
-      request.get('http://localhost:8080/exercise/id').end(function(err, res) {
+    it('should not put', function(done) {
+      request.put('http://localhost:8080/exercise/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
