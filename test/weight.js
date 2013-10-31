@@ -5,12 +5,23 @@ var should = require('should');
 
 var utils = require('./test_utils');
 
-before(utils.createUser);
-
 /**
  * Test weight
  */
 describe('Weight', function() {
+  var testUser = {};
+
+  before(function(done) {
+    utils.createUser('weight', function(user) {
+      testUser = user;
+      done();
+    });
+  });
+
+  after(function(done) {
+    utils.removeUser('weight', done);
+  });
+
   /**
    * Test that you cannot access data when not logged in
    */
@@ -71,7 +82,7 @@ describe('Weight', function() {
     var agent = request.agent();
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(utils.testUser).end(function(err, res) {
+      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -151,7 +162,7 @@ describe('Weight', function() {
     var savedId = '';
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(utils.testUser).end(function(err, res) {
+      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();

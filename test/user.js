@@ -7,48 +7,48 @@ var utils = require('./test_utils');
 var User = require(utils.libPath + '/db/user').Model;
 var EventEmitter = require('events').EventEmitter;
 
-var testUser = {
-  email : 'testuser2@localhost',
-  password : 'testing'
-};
-var testUserActivation = '';
-
-before(function(done) {
-  // Make sure the test user is removed first
-  User.remove({
-    email : {
-      $regex : testUser.email + '.*'
-    }
-  }, function(err1, doc1) {
-    should.not.exist(err1);
-    // Create the test user
-    new User({
-      email : testUser.email,
-      password : testUser.password
-    }).save(function(err2, doc2) {
-      should.not.exist(err2);
-      testUserActivation = doc2.activation;
-      done();
-    });
-  });
-});
-
-after(function(done) {
-  // Remove the test user
-  User.remove({
-    email : {
-      $regex : testUser.email + '.*'
-    }
-  }, function(err1, doc1) {
-    should.not.exist(err1);
-    done();
-  });
-});
-
 /**
  * Test the User
  */
 describe('User', function() {
+  var testUser = {
+    email : 'testuser2@localhost',
+    password : 'testing'
+  };
+  var testUserActivation = '';
+
+  before(function(done) {
+    // Make sure the test user is removed first
+    User.remove({
+      email : {
+        $regex : testUser.email + '.*'
+      }
+    }, function(err1, doc1) {
+      should.not.exist(err1);
+      // Create the test user
+      new User({
+        email : testUser.email,
+        password : testUser.password
+      }).save(function(err2, doc2) {
+        should.not.exist(err2);
+        testUserActivation = doc2.activation;
+        done();
+      });
+    });
+  });
+
+  after(function(done) {
+    // Remove the test user
+    User.remove({
+      email : {
+        $regex : testUser.email + '.*'
+      }
+    }, function(err1, doc1) {
+      should.not.exist(err1);
+      done();
+    });
+  });
+
   /**
    * Test to activate the user
    */
