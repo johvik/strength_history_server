@@ -3,11 +3,11 @@
   "version" : "0.0.1",
   "description" : "Used to store your strength training data",
   "author" : "johvik",
-  "private" : true,
   "repository" : {
     "type" : "git",
     "url" : "http://github.com/johvik/strength_history_server.git"
   },
+  "main" : "index.js",
   "scripts" : {
     "start" : "node index.js",
     "test" : "make test-coveralls"
