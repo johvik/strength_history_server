@@ -129,7 +129,7 @@ Note that the following description assumes that a valid request was made and th
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`reps` : Number
         }
-    }
+    },
 
 `sync` : Number
 
