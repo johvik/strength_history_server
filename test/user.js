@@ -1,4 +1,5 @@
 var app = require('../');
+var config = require('../config');
 
 var request = require('superagent');
 var should = require('should');
@@ -61,7 +62,7 @@ describe('User', function() {
   describe('Activation', function() {
     it('should not activate', function(done) {
       // Request activation without email
-      request.get('http://localhost:8080/activate?key=' + testUserActivation).end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/activate?key=' + testUserActivation).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -70,7 +71,7 @@ describe('User', function() {
 
     it('should not activate', function(done) {
       // Request activation with wrong key
-      request.get('http://localhost:8080/activate?key=wrong_' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/activate?key=wrong_' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -79,7 +80,7 @@ describe('User', function() {
 
     it('should not login', function(done) {
       // Login without activation
-      request.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      request.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -88,7 +89,7 @@ describe('User', function() {
 
     it('should activate', function(done) {
       // Request activation with correct key
-      request.get('http://localhost:8080/activate?key=' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/activate?key=' + testUserActivation + '&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -97,7 +98,7 @@ describe('User', function() {
 
     it('should login', function(done) {
       // Login after activation
-      request.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      request.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -106,7 +107,7 @@ describe('User', function() {
 
     it('should not activate', function(done) {
       // Request activation again
-      request.get('http://localhost:8080/activate?key=done&email=' + testUser.email).end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/activate?key=done&email=' + testUser.email).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -121,7 +122,7 @@ describe('User', function() {
     var agent = request.agent();
 
     it('should not get exercises', function(done) {
-      agent.get('http://localhost:8080/exercise').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/exercise').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -129,7 +130,7 @@ describe('User', function() {
     });
 
     it('should not login', function(done) {
-      agent.post('http://localhost:8080/login').send({
+      agent.post(config.SERVER_ADDRESS + '/login').send({
         email : testUser.email
       }).end(function(err, res) {
         should.not.exist(err);
@@ -139,7 +140,7 @@ describe('User', function() {
     });
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      agent.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -147,7 +148,7 @@ describe('User', function() {
     });
 
     it('should get exercises', function(done) {
-      agent.get('http://localhost:8080/exercise').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/exercise').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -155,7 +156,7 @@ describe('User', function() {
     });
 
     it('should logout', function(done) {
-      agent.get('http://localhost:8080/logout').redirects(0).end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/logout').redirects(0).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(302);
         done();
@@ -163,7 +164,7 @@ describe('User', function() {
     });
 
     it('should not get exercises', function(done) {
-      agent.get('http://localhost:8080/exercise').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/exercise').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -172,7 +173,7 @@ describe('User', function() {
 
     it('should not login', function(done) {
       // Wrong password
-      request.post('http://localhost:8080/login').send({
+      request.post(config.SERVER_ADDRESS + '/login').send({
         email : testUser.email,
         password : 'abc'
       }).end(function(err, res) {
@@ -184,7 +185,7 @@ describe('User', function() {
 
     it('should not login', function(done) {
       // Unknown email
-      request.post('http://localhost:8080/login').send({
+      request.post(config.SERVER_ADDRESS + '/login').send({
         email : testUser.email + 'abc',
         password : 'abc'
       }).end(function(err, res) {
@@ -195,7 +196,7 @@ describe('User', function() {
     });
 
     it('should logout', function(done) {
-      request.get('http://localhost:8080/logout?no_redirect').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/logout?no_redirect').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -219,11 +220,11 @@ describe('User', function() {
         this.buf.should.include('"authenticated":false');
         done();
       };
-      agent.get('http://localhost:8080/js/userdata.js').pipe(stream);
+      agent.get(config.SERVER_ADDRESS + '/js/userdata.js').pipe(stream);
     });
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      agent.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -241,7 +242,7 @@ describe('User', function() {
         this.buf.should.include('"authenticated":true');
         done();
       };
-      agent.get('http://localhost:8080/js/userdata.js').pipe(stream);
+      agent.get(config.SERVER_ADDRESS + '/js/userdata.js').pipe(stream);
     });
   });
 
@@ -251,7 +252,7 @@ describe('User', function() {
   describe('Signup', function() {
     it('should not signup', function(done) {
       // Email already in use
-      request.post('http://localhost:8080/signup').send(testUser).end(function(err, res) {
+      request.post(config.SERVER_ADDRESS + '/signup').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(409);
         res.text.should.include('E-mail already in use.');
@@ -261,7 +262,7 @@ describe('User', function() {
 
     it('should not signup', function(done) {
       // Email already in use
-      request.post('http://localhost:8080/signup').send({
+      request.post(config.SERVER_ADDRESS + '/signup').send({
         email : 'abc',
         password : 'abc'
       }).end(function(err, res) {
@@ -274,7 +275,7 @@ describe('User', function() {
 
     it('should not signup', function(done) {
       // No post data
-      request.post('http://localhost:8080/signup').end(function(err, res) {
+      request.post(config.SERVER_ADDRESS + '/signup').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -282,7 +283,7 @@ describe('User', function() {
     });
 
     it('should signup', function(done) {
-      request.post('http://localhost:8080/signup').send({
+      request.post(config.SERVER_ADDRESS + '/signup').send({
         email : testUser.email + '2',
         password : testUser.password
       }).end(function(err, res) {
@@ -303,7 +304,7 @@ describe('User', function() {
     var savedWorkout2 = '';
 
     it('should login', function(done) {
-      agent1.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      agent1.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -311,7 +312,7 @@ describe('User', function() {
     });
 
     it('should login', function(done) {
-      agent2.post('http://localhost:8080/login').send(testUser2).end(function(err, res) {
+      agent2.post(config.SERVER_ADDRESS + '/login').send(testUser2).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -320,7 +321,7 @@ describe('User', function() {
 
     // First create data for both test users
     it('should post', function(done) {
-      agent1.post('http://localhost:8080/exercise').send({
+      agent1.post(config.SERVER_ADDRESS + '/exercise').send({
         name : 'abc',
         standardIncrease : 2.5,
         sync : 123
@@ -337,7 +338,7 @@ describe('User', function() {
     });
 
     it('should post', function(done) {
-      agent2.post('http://localhost:8080/exercise').send({
+      agent2.post(config.SERVER_ADDRESS + '/exercise').send({
         name : 'abc',
         standardIncrease : 2.5,
         sync : 123
@@ -354,7 +355,7 @@ describe('User', function() {
     });
 
     it('should post', function(done) {
-      agent1.post('http://localhost:8080/weight').send({
+      agent1.post(config.SERVER_ADDRESS + '/weight').send({
         time : 456,
         weight : 75.5,
         sync : 123
@@ -371,7 +372,7 @@ describe('User', function() {
     });
 
     it('should post', function(done) {
-      agent2.post('http://localhost:8080/weight').send({
+      agent2.post(config.SERVER_ADDRESS + '/weight').send({
         time : 456,
         weight : 75.5,
         sync : 123
@@ -388,7 +389,7 @@ describe('User', function() {
     });
 
     it('should post', function(done) {
-      agent1.post('http://localhost:8080/workout').send({
+      agent1.post(config.SERVER_ADDRESS + '/workout').send({
         name : 'abc',
         exercises : [],
         sync : 123
@@ -406,7 +407,7 @@ describe('User', function() {
     });
 
     it('should post', function(done) {
-      agent2.post('http://localhost:8080/workout').send({
+      agent2.post(config.SERVER_ADDRESS + '/workout').send({
         name : 'abc',
         exercises : [],
         sync : 123
@@ -424,7 +425,7 @@ describe('User', function() {
     });
 
     it('should post', function(done) {
-      agent1.post('http://localhost:8080/workoutdata').send({
+      agent1.post(config.SERVER_ADDRESS + '/workoutdata').send({
         time : 456,
         workout : savedWorkout1,
         data : [],
@@ -444,7 +445,7 @@ describe('User', function() {
     });
 
     it('should post', function(done) {
-      agent2.post('http://localhost:8080/workoutdata').send({
+      agent2.post(config.SERVER_ADDRESS + '/workoutdata').send({
         time : 456,
         workout : savedWorkout2,
         data : [],

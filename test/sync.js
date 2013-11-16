@@ -1,4 +1,5 @@
 var app = require('../');
+var config = require('../config');
 
 var request = require('superagent');
 var should = require('should');
@@ -27,7 +28,7 @@ describe('Sync', function() {
    */
   describe('Unauthorized check', function() {
     it('should not get', function(done) {
-      request.get('http://localhost:8080/sync').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/sync').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -43,7 +44,7 @@ describe('Sync', function() {
     var savedId = '';
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      agent.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -51,7 +52,7 @@ describe('Sync', function() {
     });
 
     it('should post', function(done) {
-      agent.post('http://localhost:8080/exercise').send({
+      agent.post(config.SERVER_ADDRESS + '/exercise').send({
         name : 'abc',
         standardIncrease : 2.5,
         sync : 123
@@ -69,7 +70,7 @@ describe('Sync', function() {
     });
 
     it('should del', function(done) {
-      agent.del('http://localhost:8080/exercise/' + savedId).end(function(err, res) {
+      agent.del(config.SERVER_ADDRESS + '/exercise/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
@@ -81,7 +82,7 @@ describe('Sync', function() {
 
     it('should get', function(done) {
       // After one add and remove
-      agent.get('http://localhost:8080/sync').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/sync').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);

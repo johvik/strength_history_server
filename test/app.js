@@ -1,4 +1,5 @@
 var app = require('../');
+var config = require('../config');
 
 var request = require('superagent');
 var should = require('should');
@@ -8,7 +9,7 @@ var should = require('should');
  */
 describe('Request index.html', function() {
   it('should get root', function(done) {
-    request.get('http://localhost:8080/').end(function(err, res) {
+    request.get(config.SERVER_ADDRESS).end(function(err, res) {
       should.not.exist(err);
       res.should.have.status(200);
       res.text.should.include('Loading...');
@@ -18,7 +19,7 @@ describe('Request index.html', function() {
   });
 
   it('should get signup', function(done) {
-    request.get('http://localhost:8080/signup').end(function(err, res) {
+    request.get(config.SERVER_ADDRESS + '/signup').end(function(err, res) {
       should.not.exist(err);
       res.should.have.status(200);
       res.text.should.include('Loading...');
@@ -28,7 +29,7 @@ describe('Request index.html', function() {
   });
 
   it('should get exercises', function(done) {
-    request.get('http://localhost:8080/exercises').end(function(err, res) {
+    request.get(config.SERVER_ADDRESS + '/exercises').end(function(err, res) {
       should.not.exist(err);
       res.should.have.status(200);
       res.text.should.include('Loading...');
@@ -38,7 +39,7 @@ describe('Request index.html', function() {
   });
 
   it('should get workouts', function(done) {
-    request.get('http://localhost:8080/workouts').end(function(err, res) {
+    request.get(config.SERVER_ADDRESS + '/workouts').end(function(err, res) {
       should.not.exist(err);
       res.should.have.status(200);
       res.text.should.include('Loading...');
@@ -48,7 +49,7 @@ describe('Request index.html', function() {
   });
 
   it('should get history', function(done) {
-    request.get('http://localhost:8080/history').end(function(err, res) {
+    request.get(config.SERVER_ADDRESS + '/history').end(function(err, res) {
       should.not.exist(err);
       res.should.have.status(200);
       res.text.should.include('Loading...');

@@ -1,4 +1,5 @@
 var app = require('../');
+var config = require('../config');
 
 var request = require('superagent');
 var should = require('should');
@@ -27,7 +28,7 @@ describe('HistoryData', function() {
    */
   describe('Unauthorized check', function() {
     it('should not get', function(done) {
-      request.get('http://localhost:8080/historydata').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/historydata').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -35,7 +36,7 @@ describe('HistoryData', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/historydata/pages/1').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/historydata/pages/1').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -43,7 +44,7 @@ describe('HistoryData', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/historydata/pages').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/historydata/pages').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -58,7 +59,7 @@ describe('HistoryData', function() {
     var agent = request.agent();
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      agent.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -66,7 +67,7 @@ describe('HistoryData', function() {
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/historydata').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/historydata').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
@@ -76,7 +77,7 @@ describe('HistoryData', function() {
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/historydata/pages/1').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/historydata/pages/1').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         res.text.should.equal('');
@@ -85,7 +86,7 @@ describe('HistoryData', function() {
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/historydata/pages').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/historydata/pages').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         res.text.should.equal('1');

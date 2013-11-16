@@ -1,3 +1,5 @@
+var config = require('../config');
+
 var request = require('superagent');
 var should = require('should');
 
@@ -24,7 +26,7 @@ exports.createUser = function(base, cb) {
     new User(testUser).save(function(err, doc) {
       should.not.exist(err);
       // Activate
-      request.get('http://localhost:8080/activate?key=' + doc.activation + '&email=' + testUser.email).end(function(err2, res) {
+      request.get(config.SERVER_ADDRESS + '/activate?key=' + doc.activation + '&email=' + testUser.email).end(function(err2, res) {
         should.not.exist(err2);
         // Return user in the callback
         cb(testUser);

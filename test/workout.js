@@ -1,4 +1,5 @@
 var app = require('../');
+var config = require('../config');
 
 var request = require('superagent');
 var should = require('should');
@@ -27,7 +28,7 @@ describe('Workout', function() {
    */
   describe('Unauthorized check', function() {
     it('should not del', function(done) {
-      request.del('http://localhost:8080/workout/id').end(function(err, res) {
+      request.del(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -35,7 +36,7 @@ describe('Workout', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/workout/id').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -43,7 +44,7 @@ describe('Workout', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/workout/latest/id').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/workout/latest/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -51,7 +52,7 @@ describe('Workout', function() {
     });
 
     it('should not get', function(done) {
-      request.get('http://localhost:8080/workout').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -59,7 +60,7 @@ describe('Workout', function() {
     });
 
     it('should not save', function(done) {
-      request.post('http://localhost:8080/workout').end(function(err, res) {
+      request.post(config.SERVER_ADDRESS + '/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -67,7 +68,7 @@ describe('Workout', function() {
     });
 
     it('should not put', function(done) {
-      request.put('http://localhost:8080/workout/id').end(function(err, res) {
+      request.put(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -82,7 +83,7 @@ describe('Workout', function() {
     var agent = request.agent();
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      agent.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -90,7 +91,7 @@ describe('Workout', function() {
     });
 
     it('should not get', function(done) {
-      agent.get('http://localhost:8080/workout/latest/id').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout/latest/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -98,7 +99,7 @@ describe('Workout', function() {
     });
 
     it('should not get', function(done) {
-      agent.get('http://localhost:8080/workout/id').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -106,7 +107,7 @@ describe('Workout', function() {
     });
 
     it('should not del', function(done) {
-      agent.del('http://localhost:8080/workout/id').end(function(err, res) {
+      agent.del(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -114,7 +115,7 @@ describe('Workout', function() {
     });
 
     it('should not post', function(done) {
-      agent.post('http://localhost:8080/workout').end(function(err, res) {
+      agent.post(config.SERVER_ADDRESS + '/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -122,7 +123,7 @@ describe('Workout', function() {
     });
 
     it('should not post', function(done) {
-      agent.post('http://localhost:8080/workout').send({
+      agent.post(config.SERVER_ADDRESS + '/workout').send({
         name : '',
         exercises : [],
         sync : 123
@@ -134,7 +135,7 @@ describe('Workout', function() {
     });
 
     it('should not put', function(done) {
-      agent.put('http://localhost:8080/workout/id').end(function(err, res) {
+      agent.put(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -142,7 +143,7 @@ describe('Workout', function() {
     });
 
     it('should not put', function(done) {
-      agent.put('http://localhost:8080/workout/id').send({
+      agent.put(config.SERVER_ADDRESS + '/workout/id').send({
         name : 'abc',
         exercises : [],
         sync : 123
@@ -162,7 +163,7 @@ describe('Workout', function() {
     var savedId = '';
 
     it('should login', function(done) {
-      agent.post('http://localhost:8080/login').send(testUser).end(function(err, res) {
+      agent.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         done();
@@ -170,7 +171,7 @@ describe('Workout', function() {
     });
 
     it('should post', function(done) {
-      agent.post('http://localhost:8080/workout').send({
+      agent.post(config.SERVER_ADDRESS + '/workout').send({
         name : 'abc',
         exercises : [],
         sync : 123
@@ -188,7 +189,7 @@ describe('Workout', function() {
     });
 
     it('should post', function(done) {
-      agent.post('http://localhost:8080/workoutdata').send({
+      agent.post(config.SERVER_ADDRESS + '/workoutdata').send({
         time : 456,
         workout : savedId,
         data : [],
@@ -207,7 +208,7 @@ describe('Workout', function() {
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/workout/latest/' + savedId).send({
+      agent.get(config.SERVER_ADDRESS + '/workout/latest/' + savedId).send({
         time : 456,
         workout : savedId,
         data : [],
@@ -226,7 +227,7 @@ describe('Workout', function() {
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/workout').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
@@ -242,7 +243,7 @@ describe('Workout', function() {
     });
 
     it('should get', function(done) {
-      agent.get('http://localhost:8080/workout/' + savedId).end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
@@ -256,7 +257,7 @@ describe('Workout', function() {
     });
 
     it('should put', function(done) {
-      agent.put('http://localhost:8080/workout/' + savedId).send({
+      agent.put(config.SERVER_ADDRESS + '/workout/' + savedId).send({
         name : 'ABC',
         exercises : [],
         sync : 123
@@ -275,7 +276,7 @@ describe('Workout', function() {
     });
 
     it('should put', function(done) {
-      agent.put('http://localhost:8080/workout/' + savedId).send({
+      agent.put(config.SERVER_ADDRESS + '/workout/' + savedId).send({
         name : 'ABC',
         exercises : [],
         // Make sure sync is bigger
@@ -294,7 +295,7 @@ describe('Workout', function() {
     });
 
     it('should del', function(done) {
-      agent.del('http://localhost:8080/workout/' + savedId).end(function(err, res) {
+      agent.del(config.SERVER_ADDRESS + '/workout/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
