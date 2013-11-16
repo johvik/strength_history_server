@@ -6,8 +6,9 @@ Strength History Server
 
 A simple server for Strength History to store your data online.
 
-To setup your own server you need a MongoDB and a `config.js` file (inside the config/ directory).
+To setup your own server you need a MongoDB, a `config.js` file and a SSL certificates (inside the config/ directory).
 The easiest way to do this is to rename `sample_config.js` which includes all the needed configuration values.
+To generate SSL certificates rename `sample_agent.cnf` to `agent.cnf` and change the settings according to your configuration, then run make.
 Then start it with `npm start`.
 
 API
