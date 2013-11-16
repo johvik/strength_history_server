@@ -57,4 +57,13 @@ describe('Request index.html', function() {
       done();
     });
   });
+
+  it('should redirect', function(done) {
+    var agent = request.agent();
+    agent.get('http://localhost:' + config.SERVER_HTTP_PORT).redirects(0).end(function(err, res) {
+      should.not.exist(err);
+      res.should.have.status(302);
+      done();
+      });
+    });
 });
