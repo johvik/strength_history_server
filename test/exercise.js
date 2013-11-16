@@ -1,5 +1,5 @@
 var app = require('../');
-var config = require('../config');
+var config = require('../config/config.js');
 
 var request = require('superagent');
 var should = require('should');

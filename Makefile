@@ -1,7 +1,7 @@
 REPORTER=spec
 
 test-dist:
-	@cp sample_config.js config.js
+	@cp config/sample_config.js config/config.js
 	NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER)
 
 test:
