@@ -1,35 +1,36 @@
 {
-  "name" : "strength_history_server",
-  "version" : "0.0.1",
-  "description" : "Used to store your strength training data",
-  "author" : "johvik",
-  "repository" : {
-    "type" : "git",
-    "url" : "http://github.com/johvik/strength_history_server.git"
+  "name": "strength_history_server",
+  "version": "0.0.1",
+  "description": "Used to store your strength training data",
+  "author": "johvik",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/johvik/strength_history_server.git"
   },
-  "main" : "index.js",
-  "scripts" : {
-    "start" : "node index.js",
-    "test" : "make test-coveralls"
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "make test-coveralls"
   },
-  "dependencies" : {
-    "express" : ">=3.4.0",
-    "jade" : ">=0.35.0",
-    "mongoose" : ">=3.6.19",
-    "async" : ">=0.2.9",
-    "passport" : ">=0.1.17",
-    "passport-local" : ">=0.1.6",
-    "bcrypt" : ">=0.7.7",
-    "nodemailer" : ">=0.5.2"
+  "dependencies": {
+    "express": ">=3.4.0",
+    "jade": ">=0.35.0",
+    "mongoose": ">=3.6.19",
+    "async": ">=0.2.9",
+    "passport": ">=0.1.17",
+    "passport-local": ">=0.1.6",
+    "bcrypt": ">=0.7.7",
+    "nodemailer": ">=0.5.2",
+    "forever": ">=0.10.9"
   },
-  "devDependencies" : {
-    "mocha" : ">=1.13.0",
-    "should" : ">=2.0.2",
-    "superagent" : ">=0.15.7",
-    "jscoverage" : ">=0.3.8",
-    "mocha-lcov-reporter" : ">=0.0.1",
-    "coveralls" : ">=2.3.0",
-    "jshint" : ">=2.3.0"
+  "devDependencies": {
+    "mocha": ">=1.13.0",
+    "should": ">=2.0.2",
+    "superagent": ">=0.15.7",
+    "jscoverage": ">=0.3.8",
+    "mocha-lcov-reporter": ">=0.0.1",
+    "coveralls": ">=2.3.0",
+    "jshint": ">=2.3.0"
   },
-  "engine" : "node >= 0.8.14"
+  "engine": "node >= 0.8.14"
 }
