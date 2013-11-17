@@ -9,6 +9,8 @@
 # Description:       See https://github.com/johvik/strength_history_server
 ### END INIT INFO
 
+PATH=/bin:/usr/bin:/usr/local/bin
+HOME=/root
 APP_DIR=/var/www/strength_history_server
 FOREVER=$APP_DIR/node_modules/.bin/forever
 LOG_DIR=$APP_DIR/logs
