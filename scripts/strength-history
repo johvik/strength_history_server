@@ -1,7 +1,17 @@
 #!/bin/sh
+### BEGIN INIT INFO
+# Provides:          strength-history
+# Required-Start:    $mongodb
+# Required-Stop:     $mongodb
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Strength History server
+# Description:       See https://github.com/johvik/strength_history_server
+### END INIT INFO
+
 APP_DIR=/var/www/strength_history_server
 FOREVER=$APP_DIR/node_modules/.bin/forever
-LOG_DIR=$APP_DIR/logs/
+LOG_DIR=$APP_DIR/logs
 
 case "$1" in
   start)
@@ -20,6 +30,6 @@ case "$1" in
     ;;
   *)
     echo "Usage: $0 {start|stop|restart|status}"
+    exit 3
     ;;
 esac
-
