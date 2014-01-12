@@ -13,8 +13,8 @@ var EventEmitter = require('events').EventEmitter;
  */
 describe('User', function() {
   var testUser = {
-    email : 'testuser@localhost',
-    password : 'testing'
+    email: 'testuser@localhost',
+    password: 'testing'
   };
   var testUserActivation = '';
   var testUser2 = {};
@@ -22,15 +22,15 @@ describe('User', function() {
   before(function(done) {
     // Make sure the test user is removed first
     User.remove({
-      email : {
-        $regex : testUser.email + '.*'
+      email: {
+        $regex: testUser.email + '.*'
       }
     }, function(err1, doc1) {
       should.not.exist(err1);
       // Create the test user
       new User({
-        email : testUser.email,
-        password : testUser.password
+        email: testUser.email,
+        password: testUser.password
       }).save(function(err2, doc2) {
         should.not.exist(err2);
         testUserActivation = doc2.activation;
@@ -46,8 +46,8 @@ describe('User', function() {
   after(function(done) {
     // Remove the test user
     User.remove({
-      email : {
-        $regex : testUser.email + '.*'
+      email: {
+        $regex: testUser.email + '.*'
       }
     }, function(err1, doc1) {
       should.not.exist(err1);
@@ -131,7 +131,7 @@ describe('User', function() {
 
     it('should not login', function(done) {
       agent.post(config.SERVER_ADDRESS + '/login').send({
-        email : testUser.email
+        email: testUser.email
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -174,8 +174,8 @@ describe('User', function() {
     it('should not login', function(done) {
       // Wrong password
       request.post(config.SERVER_ADDRESS + '/login').send({
-        email : testUser.email,
-        password : 'abc'
+        email: testUser.email,
+        password: 'abc'
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -186,8 +186,8 @@ describe('User', function() {
     it('should not login', function(done) {
       // Unknown email
       request.post(config.SERVER_ADDRESS + '/login').send({
-        email : testUser.email + 'abc',
-        password : 'abc'
+        email: testUser.email + 'abc',
+        password: 'abc'
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -263,8 +263,8 @@ describe('User', function() {
     it('should not signup', function(done) {
       // Email already in use
       request.post(config.SERVER_ADDRESS + '/signup').send({
-        email : 'abc',
-        password : 'abc'
+        email: 'abc',
+        password: 'abc'
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -284,8 +284,8 @@ describe('User', function() {
 
     it('should signup', function(done) {
       request.post(config.SERVER_ADDRESS + '/signup').send({
-        email : testUser.email + '2',
-        password : testUser.password
+        email: testUser.email + '2',
+        password: testUser.password
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -302,6 +302,7 @@ describe('User', function() {
     var agent2 = request.agent();
     var savedWorkout1 = '';
     var savedWorkout2 = '';
+    var savedId = '';
 
     it('should login', function(done) {
       agent1.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
@@ -322,9 +323,9 @@ describe('User', function() {
     // First create data for both test users
     it('should post', function(done) {
       agent1.post(config.SERVER_ADDRESS + '/exercise').send({
-        name : 'abc',
-        standardIncrease : 2.5,
-        sync : 123
+        name: 'abc',
+        standardIncrease: 2.5,
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -339,9 +340,9 @@ describe('User', function() {
 
     it('should post', function(done) {
       agent2.post(config.SERVER_ADDRESS + '/exercise').send({
-        name : 'abc',
-        standardIncrease : 2.5,
-        sync : 123
+        name: 'abc',
+        standardIncrease: 2.5,
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -356,9 +357,9 @@ describe('User', function() {
 
     it('should post', function(done) {
       agent1.post(config.SERVER_ADDRESS + '/weight').send({
-        time : 456,
-        weight : 75.5,
-        sync : 123
+        time: 456,
+        weight: 75.5,
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -373,9 +374,9 @@ describe('User', function() {
 
     it('should post', function(done) {
       agent2.post(config.SERVER_ADDRESS + '/weight').send({
-        time : 456,
-        weight : 75.5,
-        sync : 123
+        time: 456,
+        weight: 75.5,
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -390,9 +391,9 @@ describe('User', function() {
 
     it('should post', function(done) {
       agent1.post(config.SERVER_ADDRESS + '/workout').send({
-        name : 'abc',
-        exercises : [],
-        sync : 123
+        name: 'abc',
+        exercises: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -408,9 +409,9 @@ describe('User', function() {
 
     it('should post', function(done) {
       agent2.post(config.SERVER_ADDRESS + '/workout').send({
-        name : 'abc',
-        exercises : [],
-        sync : 123
+        name: 'abc',
+        exercises: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -426,10 +427,10 @@ describe('User', function() {
 
     it('should post', function(done) {
       agent1.post(config.SERVER_ADDRESS + '/workoutdata').send({
-        time : 456,
-        workout : savedWorkout1,
-        data : [],
-        sync : 123
+        time: 456,
+        workout: savedWorkout1,
+        data: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -446,10 +447,10 @@ describe('User', function() {
 
     it('should post', function(done) {
       agent2.post(config.SERVER_ADDRESS + '/workoutdata').send({
-        time : 456,
-        workout : savedWorkout2,
-        data : [],
-        sync : 123
+        time: 456,
+        workout: savedWorkout2,
+        data: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);

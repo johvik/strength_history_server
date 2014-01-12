@@ -124,9 +124,9 @@ describe('Weight', function() {
 
     it('should not post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/weight').send({
-        time : 123,
-        weight : 'abc',
-        sync : 123
+        time: 123,
+        weight: 'abc',
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -144,9 +144,9 @@ describe('Weight', function() {
 
     it('should not put', function(done) {
       agent.put(config.SERVER_ADDRESS + '/weight/id').send({
-        time : 456,
-        weight : 75.5,
-        sync : 123
+        time: 456,
+        weight: 75.5,
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -172,9 +172,9 @@ describe('Weight', function() {
 
     it('should post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/weight').send({
-        time : 456,
-        weight : 75.5,
-        sync : 123
+        time: 456,
+        weight: 75.5,
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -234,9 +234,9 @@ describe('Weight', function() {
 
     it('should put', function(done) {
       agent.put(config.SERVER_ADDRESS + '/weight/' + savedId).send({
-        time : 789,
-        weight : 99.9,
-        sync : 123
+        time: 789,
+        weight: 99.9,
+        sync: 123
       }).end(function(err, res) {
         // Should not update because of sync
         should.not.exist(err);
@@ -253,10 +253,10 @@ describe('Weight', function() {
 
     it('should put', function(done) {
       agent.put(config.SERVER_ADDRESS + '/weight/' + savedId).send({
-        time : 789,
-        weight : 99.9,
+        time: 789,
+        weight: 99.9,
         // Make sure sync is bigger
-        sync : 100000
+        sync: 100000
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);

@@ -85,9 +85,9 @@ describe('WorkoutData', function() {
 
     it('should post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/workout').send({
-        name : 'abc',
-        exercises : [],
-        sync : 123
+        name: 'abc',
+        exercises: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -127,10 +127,10 @@ describe('WorkoutData', function() {
 
     it('should not post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/workoutdata').send({
-        time : 456,
-        workout : {},
-        data : [],
-        sync : 123
+        time: 456,
+        workout: {},
+        data: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -148,10 +148,10 @@ describe('WorkoutData', function() {
 
     it('should not put', function(done) {
       agent.put(config.SERVER_ADDRESS + '/workoutdata/id').send({
-        time : 456,
-        workout : savedWorkout,
-        data : [],
-        sync : 123
+        time: 456,
+        workout: savedWorkout,
+        data: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
@@ -178,9 +178,9 @@ describe('WorkoutData', function() {
 
     it('should post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/workout').send({
-        name : 'abc',
-        exercises : [],
-        sync : 123
+        name: 'abc',
+        exercises: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -196,10 +196,10 @@ describe('WorkoutData', function() {
 
     it('should post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/workoutdata').send({
-        time : 456,
-        workout : savedWorkout,
-        data : [],
-        sync : 123
+        time: 456,
+        workout: savedWorkout,
+        data: [],
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
@@ -246,10 +246,10 @@ describe('WorkoutData', function() {
 
     it('should put', function(done) {
       agent.put(config.SERVER_ADDRESS + '/workoutdata/' + savedId).send({
-        time : 789,
-        workout : savedWorkout,
-        data : [],
-        sync : 123
+        time: 789,
+        workout: savedWorkout,
+        data: [],
+        sync: 123
       }).end(function(err, res) {
         // Should not update because of sync
         should.not.exist(err);
@@ -266,11 +266,11 @@ describe('WorkoutData', function() {
 
     it('should put', function(done) {
       agent.put(config.SERVER_ADDRESS + '/workoutdata/' + savedId).send({
-        time : 789,
-        workout : savedWorkout,
-        data : [],
+        time: 789,
+        workout: savedWorkout,
+        data: [],
         // Make sure sync is bigger
-        sync : 100000
+        sync: 100000
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);

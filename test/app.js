@@ -64,6 +64,6 @@ describe('Request index.html', function() {
       should.not.exist(err);
       res.should.have.status(302);
       done();
-      });
     });
+  });
 });

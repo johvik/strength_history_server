@@ -53,9 +53,9 @@ describe('Sync', function() {
 
     it('should post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/exercise').send({
-        name : 'abc',
-        standardIncrease : 2.5,
-        sync : 123
+        name: 'abc',
+        standardIncrease: 2.5,
+        sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);

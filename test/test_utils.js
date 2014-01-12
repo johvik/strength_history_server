@@ -19,8 +19,8 @@ var password = 'testing';
 exports.createUser = function(base, cb) {
   exports.removeUser(base, function() {
     var testUser = {
-      email : base + email,
-      password : password
+      email: base + email,
+      password: password
     };
     // Create the test user
     new User(testUser).save(function(err, doc) {
