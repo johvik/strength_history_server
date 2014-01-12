@@ -161,7 +161,7 @@ describe('Exercise', function() {
   describe('Sequence', function() {
     var agent = request.agent();
     var savedId = '';
-    var savedWorkout;
+    var savedWorkout = '';
 
     it('should login', function(done) {
       agent.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
