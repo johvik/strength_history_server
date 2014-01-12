@@ -12,7 +12,9 @@
     "start": "node index.js",
     "test": "grunt release",
     "blanket": {
-      "pattern": ["lib"]
+      "pattern": ["strength_history_server/lib",
+        "strength_history_server/config/index.js"
+      ]
     }
   },
   "dependencies": {
