@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'test';
+
 var app = require('../');
 var config = require('../config');
 
@@ -7,20 +9,20 @@ var should = require('should');
 var utils = require('./test_utils');
 
 /**
- * Test exercise
+ * Test workout
  */
-describe('Exercise', function() {
+describe('Workout', function() {
   var testUser = {};
 
   before(function(done) {
-    utils.createUser('exercise', function(user) {
+    utils.createUser('workout', function(user) {
       testUser = user;
       done();
     });
   });
 
   after(function(done) {
-    utils.removeUser('exercise', done);
+    utils.removeUser('workout', done);
   });
 
   /**
@@ -28,7 +30,7 @@ describe('Exercise', function() {
    */
   describe('Unauthorized check', function() {
     it('should not del', function(done) {
-      request.del(config.SERVER_ADDRESS + '/exercise/id').end(function(err, res) {
+      request.del(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -36,7 +38,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get(config.SERVER_ADDRESS + '/exercise/id').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -44,7 +46,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get(config.SERVER_ADDRESS + '/exercise/latest/id').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/workout/latest/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -52,7 +54,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      request.get(config.SERVER_ADDRESS + '/exercise').end(function(err, res) {
+      request.get(config.SERVER_ADDRESS + '/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -60,7 +62,7 @@ describe('Exercise', function() {
     });
 
     it('should not save', function(done) {
-      request.post(config.SERVER_ADDRESS + '/exercise').end(function(err, res) {
+      request.post(config.SERVER_ADDRESS + '/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -68,7 +70,7 @@ describe('Exercise', function() {
     });
 
     it('should not put', function(done) {
-      request.put(config.SERVER_ADDRESS + '/exercise/id').end(function(err, res) {
+      request.put(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(401);
         done();
@@ -91,7 +93,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      agent.get(config.SERVER_ADDRESS + '/exercise/latest/id').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout/latest/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -99,7 +101,7 @@ describe('Exercise', function() {
     });
 
     it('should not get', function(done) {
-      agent.get(config.SERVER_ADDRESS + '/exercise/id').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -107,7 +109,7 @@ describe('Exercise', function() {
     });
 
     it('should not del', function(done) {
-      agent.del(config.SERVER_ADDRESS + '/exercise/id').end(function(err, res) {
+      agent.del(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -115,7 +117,7 @@ describe('Exercise', function() {
     });
 
     it('should not post', function(done) {
-      agent.post(config.SERVER_ADDRESS + '/exercise').end(function(err, res) {
+      agent.post(config.SERVER_ADDRESS + '/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -123,9 +125,9 @@ describe('Exercise', function() {
     });
 
     it('should not post', function(done) {
-      agent.post(config.SERVER_ADDRESS + '/exercise').send({
+      agent.post(config.SERVER_ADDRESS + '/workout').send({
         name: '',
-        standardIncrease: 2.5,
+        exercises: [],
         sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
@@ -135,7 +137,7 @@ describe('Exercise', function() {
     });
 
     it('should not put', function(done) {
-      agent.put(config.SERVER_ADDRESS + '/exercise/id').end(function(err, res) {
+      agent.put(config.SERVER_ADDRESS + '/workout/id').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(400);
         done();
@@ -143,9 +145,9 @@ describe('Exercise', function() {
     });
 
     it('should not put', function(done) {
-      agent.put(config.SERVER_ADDRESS + '/exercise/id').send({
+      agent.put(config.SERVER_ADDRESS + '/workout/id').send({
         name: 'abc',
-        standardIncrease: 2.5,
+        exercises: [],
         sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
@@ -161,7 +163,6 @@ describe('Exercise', function() {
   describe('Sequence', function() {
     var agent = request.agent();
     var savedId = '';
-    var savedWorkout = '';
 
     it('should login', function(done) {
       agent.post(config.SERVER_ADDRESS + '/login').send(testUser).end(function(err, res) {
@@ -172,41 +173,19 @@ describe('Exercise', function() {
     });
 
     it('should post', function(done) {
-      agent.post(config.SERVER_ADDRESS + '/exercise').send({
-        name: 'abc',
-        standardIncrease: 2.5,
-        sync: 123
-      }).end(function(err, res) {
-        should.not.exist(err);
-        res.should.have.status(200);
-        var json = JSON.parse(res.text);
-        json.should.have.property('name', 'abc');
-        json.should.have.property('standardIncrease', 2.5);
-        json.should.have.property('sync', 123);
-        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
-        savedId = json._id;
-        done();
-      });
-    });
-
-    it('should post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/workout').send({
         name: 'abc',
-        exercises: [
-          savedId
-        ],
+        exercises: [],
         sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
         json.should.have.property('name', 'abc');
-        json.should.have.property('exercises').and.eql([
-          savedId
-        ]);
+        json.should.have.property('exercises').and.eql([]);
         json.should.have.property('sync', 123);
         json.should.have.keys('_id', 'name', 'exercises', 'sync');
-        savedWorkout = json._id;
+        savedId = json._id;
         done();
       });
     });
@@ -214,33 +193,16 @@ describe('Exercise', function() {
     it('should post', function(done) {
       agent.post(config.SERVER_ADDRESS + '/workoutdata').send({
         time: 456,
-        workout: savedWorkout,
-        data: [{
-          exercise: savedId,
-          sets: [{
-            weight: 55.2,
-            reps: 12
-          }]
-        }],
+        workout: savedId,
+        data: [],
         sync: 123
       }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
         json.should.have.property('time', 456);
-        json.should.have.property('workout', savedWorkout);
-        json.should.have.property('data');
-        var data = json.data;
-        data.should.have.length(1);
-        var o = data[0];
-        o.should.have.property('exercise', savedId);
-        o.should.have.property('sets');
-        var sets = o.sets;
-        sets.should.have.length(1);
-        sets[0].should.have.property('weight', 55.2);
-        sets[0].should.have.property('reps', 12);
-        sets[0].should.have.keys('weight', 'reps');
-        o.should.have.keys('exercise', 'sets');
+        json.should.have.property('workout', savedId);
+        json.should.have.property('data').and.eql([]);
         json.should.have.property('sync', 123);
         json.should.have.keys('_id', 'time', 'workout', 'data', 'sync');
         done();
@@ -248,24 +210,18 @@ describe('Exercise', function() {
     });
 
     it('should get', function(done) {
-      agent.get(config.SERVER_ADDRESS + '/exercise/latest/' + savedId).end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout/latest/' + savedId).send({
+        time: 456,
+        workout: savedId,
+        data: [],
+        sync: 123
+      }).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
         json.should.have.property('time', 456);
-        json.should.have.property('workout', savedWorkout);
-        json.should.have.property('data');
-        var data = json.data;
-        data.should.have.length(1);
-        var o = data[0];
-        o.should.have.property('exercise', savedId);
-        o.should.have.property('sets');
-        var sets = o.sets;
-        sets.should.have.length(1);
-        sets[0].should.have.property('weight', 55.2);
-        sets[0].should.have.property('reps', 12);
-        sets[0].should.have.keys('weight', 'reps');
-        o.should.have.keys('exercise', 'sets');
+        json.should.have.property('workout', savedId);
+        json.should.have.property('data').and.eql([]);
         json.should.have.property('sync', 123);
         json.should.have.keys('_id', 'time', 'workout', 'data', 'sync');
         done();
@@ -273,7 +229,7 @@ describe('Exercise', function() {
     });
 
     it('should get', function(done) {
-      agent.get(config.SERVER_ADDRESS + '/exercise').end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout').end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
@@ -281,31 +237,31 @@ describe('Exercise', function() {
         var o = json[0];
         o.should.have.property('_id', savedId);
         o.should.have.property('name', 'abc');
-        o.should.have.property('standardIncrease', 2.5);
+        o.should.have.property('exercises').and.eql([]);
         o.should.have.property('sync', 123);
-        o.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        o.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
       });
     });
 
     it('should get', function(done) {
-      agent.get(config.SERVER_ADDRESS + '/exercise/' + savedId).end(function(err, res) {
+      agent.get(config.SERVER_ADDRESS + '/workout/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'abc');
-        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('exercises').and.eql([]);
         json.should.have.property('sync', 123);
-        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
       });
     });
 
     it('should put', function(done) {
-      agent.put(config.SERVER_ADDRESS + '/exercise/' + savedId).send({
+      agent.put(config.SERVER_ADDRESS + '/workout/' + savedId).send({
         name: 'ABC',
-        standardIncrease: 7.5,
+        exercises: [],
         sync: 123
       }).end(function(err, res) {
         // Should not update because of sync
@@ -314,17 +270,17 @@ describe('Exercise', function() {
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'abc');
-        json.should.have.property('standardIncrease', 2.5);
+        json.should.have.property('exercises').and.eql([]);
         json.should.have.property('sync', 123);
-        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
       });
     });
 
     it('should put', function(done) {
-      agent.put(config.SERVER_ADDRESS + '/exercise/' + savedId).send({
+      agent.put(config.SERVER_ADDRESS + '/workout/' + savedId).send({
         name: 'ABC',
-        standardIncrease: 7.5,
+        exercises: [],
         // Make sure sync is bigger
         sync: 100000
       }).end(function(err, res) {
@@ -333,15 +289,15 @@ describe('Exercise', function() {
         var json = JSON.parse(res.text);
         json.should.have.property('_id', savedId);
         json.should.have.property('name', 'ABC');
-        json.should.have.property('standardIncrease', 7.5);
+        json.should.have.property('exercises').and.eql([]);
         json.should.have.property('sync', 100000);
-        json.should.have.keys('_id', 'name', 'standardIncrease', 'sync');
+        json.should.have.keys('_id', 'name', 'exercises', 'sync');
         done();
       });
     });
 
     it('should del', function(done) {
-      agent.del(config.SERVER_ADDRESS + '/exercise/' + savedId).end(function(err, res) {
+      agent.del(config.SERVER_ADDRESS + '/workout/' + savedId).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         var json = JSON.parse(res.text);

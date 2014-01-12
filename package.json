@@ -10,14 +10,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "make test-coveralls",
+    "test": "grunt release",
     "blanket": {
       "pattern": ["lib"]
     }
   },
   "dependencies": {
     "express": "~3.4.0",
-    "jade": "~0.35.0",
     "mongoose": "~3.6.19",
     "async": "~0.2.9",
     "passport": "~0.1.17",
@@ -33,13 +32,8 @@
     "grunt-mocha-test": "~0.8.1",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-mocha-cov": "~0.1.1",
-    "mocha": "~1.13.0",
-    "should": "~2.0.2",
-    "superagent": "~0.15.7",
-    "jscoverage": "~0.3.8",
-    "mocha-lcov-reporter": "~0.0.1",
-    "coveralls": "~2.3.0",
-    "jshint": "~2.3.0"
+    "should": "~2.1.1",
+    "superagent": "~0.16.0"
   },
-  "engine": "node >= 0.8.14"
+  "engine": "node >= 0.10.22"
 }

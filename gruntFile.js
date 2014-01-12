@@ -77,7 +77,7 @@ module.exports = function(grunt) {
       }
     },
     mochacov: {
-      coverage: {
+      travis: {
         options: {
           coveralls: {
             serviceName: 'travis-ci'
@@ -104,7 +104,8 @@ module.exports = function(grunt) {
   grunt.registerTask('cov', ['mochacov:cov']);
   grunt.registerTask('release', ['jshint',
     'jsbeautifier:release',
-    'mochaTest'
+    'mochaTest',
+    'mochacov:travis'
   ]);
 
   grunt.registerTask('timestamp', function() {

@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'test';
+
 var app = require('../');
 var config = require('../config');
 
@@ -5,7 +7,7 @@ var request = require('superagent');
 var should = require('should');
 
 var utils = require('./test_utils');
-var User = require(utils.libPath + '/db/user').Model;
+var User = require('../lib/db/user').Model;
 var EventEmitter = require('events').EventEmitter;
 
 /**

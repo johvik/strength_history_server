@@ -16,6 +16,7 @@ coverage.html
 npm-debug.log
 /node_modules
 /.settings
+.project
 config.js
 agent.cnf
 npm-shrinkwrap.json

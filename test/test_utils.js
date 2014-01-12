@@ -1,11 +1,11 @@
+process.env.NODE_ENV = 'test';
+
 var config = require('../config');
 
 var request = require('superagent');
 var should = require('should');
 
-exports.libPath = process.env.STRENGTH_HISTORY_COV ? '../lib-cov' : '../lib';
-
-var User = require(exports.libPath + '/db/user').Model;
+var User = require('../lib/db/user').Model;
 
 var email = 'test@localhost';
 var password = 'testing';
