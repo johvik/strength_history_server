@@ -8,3 +8,9 @@ exports.EMAIL_ACCOUNT = 'some.email@localhost';
 exports.EMAIL_PASSWORD = 'email password';
 // Address to MongoDB
 exports.MONGODB = 'mongodb://localhost:27017/db';
+
+// Test section (optional, but required to run tests)
+exports.SERVER_PORT_TEST = 8081; // Should usually be different from SERVER_PORT
+exports.SERVER_HTTP_PORT_TEST = 8001; // Should usually be different from SERVER_HTTP_PORT
+// E-mails aren't sent during tests
+exports.MONGODB_TEST = 'mongodb://localhost:27017/test_db';
