@@ -87,7 +87,9 @@ module.exports = function(grunt) {
         }
       },
       options: {
-        files: ['test/**/*.js']
+        files: ['test/**/*.js'],
+        ui: 'bdd',
+        colors: true
       }
     }
   });
