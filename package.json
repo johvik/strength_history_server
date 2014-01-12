@@ -31,7 +31,6 @@
     "grunt": "~0.4.2",
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-jsbeautifier": "~0.2.6",
-    "grunt-mocha-test": "~0.8.1",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-mocha-cov": "~0.1.1",
     "should": "~2.1.1",

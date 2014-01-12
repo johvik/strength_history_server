@@ -3,7 +3,6 @@
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsbeautifier');
-  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-mocha-cov');
 
@@ -68,15 +67,12 @@ module.exports = function(grunt) {
         }
       }
     },
-    mochaTest: {
+    mochacov: {
       test: {
         options: {
           reporter: 'spec'
-        },
-        src: ['test/**/*.js']
-      }
-    },
-    mochacov: {
+        }
+      },
       travis: {
         options: {
           coveralls: {
@@ -99,12 +95,12 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', ['jshint',
     'jsbeautifier:default',
-    'mochaTest'
+    'mochacov:test'
   ]);
   grunt.registerTask('cov', ['mochacov:cov']);
   grunt.registerTask('release', ['jshint',
     'jsbeautifier:release',
-    'mochaTest',
+    'mochacov:test',
     'mochacov:travis'
   ]);
 
