@@ -21,7 +21,7 @@
     "express": "~3.4.7",
     "mongoose": "~3.8.4",
     "async": "~0.2.9",
-    "passport": "~0.1.18",
+    "passport": "~0.2.0",
     "passport-local": "~0.1.6",
     "bcrypt": "~0.7.7",
     "nodemailer": "~0.6.0",
@@ -32,8 +32,8 @@
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-jsbeautifier": "~0.2.6",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-mocha-cov": "~0.1.1",
-    "should": "~2.1.1",
+    "grunt-mocha-cov": "~0.2.1",
+    "should": "~3.1.2",
     "superagent": "~0.16.0"
   },
   "engine": "node >= 0.10.22"
